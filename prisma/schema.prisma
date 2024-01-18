@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Admin {
   id         Int     @id @default(autoincrement())
   firstName  String
   lastName   String
@@ -19,9 +19,21 @@ model User {
   gender     Gender
   profileImg String? @db.Text
   address    String? @db.Text
+  
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
 
-  userTypeId Int
-  userType   UserType @relation(fields: [userTypeId], references: [id])
+model Donor {
+  id         Int     @id @default(autoincrement())
+  firstName  String
+  lastName   String
+  email      String
+  password   String
+  gender     Gender
+  profileImg String? @db.Text
+  address    String? @db.Text
   
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -32,15 +44,5 @@ enum Gender {
   male
   female
   other
-}
-
-model UserType {
-  id    Int    @id @default(autoincrement())
-  name  String
-  users User[]
-
-  status     Boolean  @default(true)
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
 }
 

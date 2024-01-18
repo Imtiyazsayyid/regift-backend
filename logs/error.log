@@ -5,3 +5,9 @@
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in functionName","route":"/api/admin/users","timestamp":"2024-01-18T07:44:17.357Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in functionName","route":"/api/admin/users","timestamp":"2024-01-18T07:48:34.983Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in functionName","route":"/api/admin/users","timestamp":"2024-01-18T07:49:35.618Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in getAllUsers","route":"/api/admin/users","timestamp":"2024-01-18T17:03:10.769Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in getAllUsers","route":"/api/admin/users","timestamp":"2024-01-18T17:03:11.037Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in getAllUsers","route":"/api/admin/users","timestamp":"2024-01-18T17:06:14.742Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in getAllUsers","route":"/api/admin/users","timestamp":"2024-01-18T17:06:14.988Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2022","meta":{"column":"(not available)","modelName":"Donor"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors","timestamp":"2024-01-18T18:09:10.619Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2022","meta":{"column":"(not available)","modelName":"Donor"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors","timestamp":"2024-01-18T18:09:10.642Z"}
