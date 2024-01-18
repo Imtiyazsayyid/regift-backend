@@ -177,6 +177,7 @@ export async function deleteOrganisation(req, res) {
     return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
   }
 }
+
 // Inventory Functions
 export async function getAllInventories(req, res) {
   try {

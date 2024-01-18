@@ -10,11 +10,11 @@ router.route("/donor/:id").delete(adminController.deleteDonor);
 
 router.route("/organisations").get(adminController.getAllOrganisations);
 router.route("/organisations").post(adminController.saveOrganisation);
-router.route("/organisations/:id").get(adminController.getSingleOrganisation);
-router.route("/organisations/:id").delete(adminController.deleteOrganisation);
+router.route("/organisation/:id").get(adminController.getSingleOrganisation);
+router.route("/organisation/:id").delete(adminController.deleteOrganisation);
 
-router.route("/inventory").get(adminController.getAllInventories);
-router.route("/inventory").post(adminController.saveInventory);
+router.route("/inventories").get(adminController.getAllInventories);
+router.route("/inventories").post(adminController.saveInventory);
 router.route("/inventory/:id").get(adminController.getSingleInventory);
 router.route("/inventory/:id").delete(adminController.deleteInventory);
 
