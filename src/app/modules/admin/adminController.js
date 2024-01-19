@@ -174,7 +174,13 @@ export async function saveOrganisation(req, res) {
 
     const validation = organisationSchema.safeParse(organisationData);
     if(!validation.success) {
-      return sendResponse(res, false, organisationData, "Error", statusType.DB_ERROR);
+      return sendResponse(
+        res,
+        false,
+        organisationData,
+        "Error",
+        statusType.BAD_REQUEST
+      );
     }
     
     let savedOrganisation;
@@ -187,8 +193,12 @@ export async function saveOrganisation(req, res) {
         }
       });
     } else {
-
+      savedOrganisation = await prisma.organisation.create({
+        data: organisationBody,
+      });
     }
+
+    return sendResponse(res, true, organisationData, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
@@ -197,7 +207,25 @@ export async function saveOrganisation(req, res) {
 
 export async function getSingleOrganisation(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const { id } = req.params;
+
+    if(!id || !getIntOrNull(id)) {
+      return sendResponse(
+        res,
+        false,
+        null,
+        "Invalid Organisation id",
+        statusType.BAD_REQUEST
+      )
+    } 
+
+    const organisation = await prisma.organisation.findUnique({
+      where: {
+        id: parseInt(id),
+      }
+    });
+
+    return sendResponse(res, true, organisation, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       req.originalUrl,
@@ -210,7 +238,23 @@ export async function getSingleOrganisation(req, res) {
 
 export async function deleteOrganisation(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const { id } = req.params;
+
+    if(!id || !getIntOrNull(id)){
+      return sendResponse(
+        res,
+        null,
+        "Invalid Organisation id",
+        statusType.BAD_REQUEST
+      )
+    }
+
+    const deletedOrganisation = await prisma.organisation.delete({
+      where: {
+        id: parseInt(id),
+      }
+    });
+    return sendResponse(res, true, deletedOrganisation, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       req.originalUrl,
