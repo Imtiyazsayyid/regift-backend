@@ -23,4 +23,34 @@ const donorSchema = z.object({
     }),
 });
 
-export { donorSchema };
+const allowedApprovalStatus = [ "pending", "approved", "rejected" ];
+
+const organisationSchema = z.object({
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(2, "Name is too short")
+    .max(100, "Name is too long"),
+  acronym: z
+    .string({ required_error: "Acronym is required" }),
+  email: z
+    .string({ required_error: "Email is required" }).email(),
+  password: z
+    .string({ required_error: "Password is required" })
+    .min(3, "Password is too short")
+    .max(45, "Password is too long"),
+  website: z.string({ required_error: "Website is required" }).url(),
+  address: z
+    .string({ required_error: "Address is required" })
+    .min(5, "Address is too short")
+    .max(255, "Address is too long"),
+  approvalStatus: z
+    .string({ required_error: "Approval Status is required" })
+    .refine((data) => allowedApprovalStatus.includes(data), {
+      message: "Invalid approval status",
+    }),
+  status: z
+    .boolean({ required_error: "Status is required"}),
+});
+
+export { donorSchema, organisationSchema };
+
