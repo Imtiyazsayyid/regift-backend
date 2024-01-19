@@ -3,7 +3,7 @@ import logger from "@/@core/services/LoggingService";
 import { sendResponse } from "@core/services/ResponseService";
 import prisma from "@/@core/helpers/prisma";
 import { getIntOrNull } from "@/@core/helpers/commonHelpers";
-import { donorSchema } from "../validationSchema";
+import { donorSchema, organisationSchema } from "../validationSchema";
 
 // Donor Functions
 export async function getAllDonors(req, res) {
@@ -132,7 +132,8 @@ export async function deleteDonor(req, res) {
 // Organisation Functions
 export async function getAllOrganisations(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const organisations = await prisma.organisation.findMany();
+    return sendResponse(res, true, organisations, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       req.originalUrl,
@@ -145,7 +146,49 @@ export async function getAllOrganisations(req, res) {
 
 export async function saveOrganisation(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const {
+      id,
+      name,
+      acronym,
+      email,
+      password,
+      website,
+      logo,
+      address,
+      approvalStatus,
+      status
+    } = req.body;
+
+    const organisationData = {
+      id,
+      name,
+      acronym,
+      email,
+      password,
+      website,
+      logo,
+      address,
+      approvalStatus,
+      status
+    };
+
+    const validation = organisationSchema.safeParse(organisationData);
+    if(!validation.success) {
+      return sendResponse(res, false, organisationData, "Error", statusType.DB_ERROR);
+    }
+    
+    let savedOrganisation;
+
+    if(organisationBody.id){
+      savedOrganisation = await prisma.organisation.update({
+        data: organisationBody,
+        where: {
+          id: organisationBody.id,
+        }
+      });
+    } else {
+
+    }
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
