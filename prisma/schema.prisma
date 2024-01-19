@@ -40,6 +40,28 @@ model Donor {
   updated_at DateTime @default(now())
 }
 
+model Organisation {
+  id         Int      @id @default(autoincrement())
+  name       String
+  acronym    String
+  email      String
+  password   String
+  website    String
+  logo       String? @db.Text
+  address    String @db.Text
+  approvalStatus  ApprovalStatus
+  
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+}
+
 enum Gender {
   male
   female
