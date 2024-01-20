@@ -19,7 +19,7 @@ model Admin {
   gender     Gender
   profileImg String? @db.Text
   address    String? @db.Text
-  
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -34,26 +34,74 @@ model Donor {
   gender     Gender
   profileImg String? @db.Text
   address    String? @db.Text
+
+  donatedItem DonatedItem[]
+
+  status      Boolean       @default(true)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now())
   
+}
+
+model Organisation {
+  id             Int            @id @default(autoincrement())
+  name           String
+  acronym        String?
+  email          String
+  password       String
+  website        String
+  logo           String?        @db.Text
+  address        String         @db.Text
+  approvalStatus ApprovalStatus
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
 
-model Organisation {
-  id         Int      @id @default(autoincrement())
-  name       String
-  acronym    String
-  email      String
-  password   String
-  website    String
-  logo       String? @db.Text
-  address    String @db.Text
-  approvalStatus  ApprovalStatus
-  
+model Category {
+  id            Int           @id @default(autoincrement())
+  name          String
+  key           String        @unique
+  description   String?       @db.Text
+
+  donatedItems DonatedItem[]
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+model DonatedItem {
+  id                Int            @id @default(autoincrement())
+  title             String
+  description       String?        @db.Text
+  quantity          Int
+  condition         Condition
+  pickupAddress     String?        @db.Text
+  isPickupAvailable Boolean        @default(false)
+  contactEmail      String
+  approvalStatus    ApprovalStatus @default(pending)
+
+  ///Foreign Key
+  userId     Int
+  categoryId Int
+
+  /// Relationships
+  user     Donor    @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+enum Condition {
+  new
+  like_new
+  used_good
+  used_fair
+  used_poor
 }
 
 enum ApprovalStatus {
@@ -67,4 +115,3 @@ enum Gender {
   female
   other
 }
-
