@@ -35,12 +35,11 @@ model Donor {
   profileImg String? @db.Text
   address    String? @db.Text
 
-  donatedItem DonatedItem[]
+  donatedItems DonatedItem[]
 
-  status      Boolean       @default(true)
-  created_at  DateTime      @default(now())
-  updated_at  DateTime      @default(now())
-  
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
 
 model Organisation {
@@ -49,10 +48,10 @@ model Organisation {
   acronym        String?
   email          String
   password       String
-  website        String
+  websiteUrl     String?
   logo           String?        @db.Text
   address        String         @db.Text
-  approvalStatus ApprovalStatus
+  approvalStatus ApprovalStatus @default(pending)
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -60,10 +59,10 @@ model Organisation {
 }
 
 model Category {
-  id            Int           @id @default(autoincrement())
-  name          String
-  key           String        @unique
-  description   String?       @db.Text
+  id          Int     @id @default(autoincrement())
+  name        String
+  key         String  @unique
+  description String? @db.Text
 
   donatedItems DonatedItem[]
 
@@ -80,16 +79,13 @@ model DonatedItem {
   condition         Condition
   pickupAddress     String?        @db.Text
   isPickupAvailable Boolean        @default(false)
-  contactEmail      String
   approvalStatus    ApprovalStatus @default(pending)
 
-  ///Foreign Key
-  userId     Int
-  categoryId Int
+  donorId Int
+  donor   Donor @relation(fields: [donorId], references: [id])
 
-  /// Relationships
-  user     Donor    @relation(fields: [userId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
