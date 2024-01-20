@@ -6,6 +6,7 @@ import { getIntOrNull } from "@/@core/helpers/commonHelpers";
 import { donorSchema, organisationSchema } from "../validationSchema";
 
 // Donor Functions
+
 export async function getAllDonors(req, res) {
   try {
     const donors = await prisma.donor.findMany();
@@ -130,6 +131,7 @@ export async function deleteDonor(req, res) {
 }
 
 // Organisation Functions
+
 export async function getAllOrganisations(req, res) {
   try {
     const organisations = await prisma.organisation.findMany();
@@ -266,6 +268,7 @@ export async function deleteOrganisation(req, res) {
 }
 
 // Inventory Functions
+
 export async function getAllInventories(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
@@ -307,5 +310,73 @@ export async function deleteInventory(req, res) {
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in deleteInventory", error);
     return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
+  }
+}
+
+
+// Category
+
+export async function getAllCategories(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in getAllCategories", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function saveCategory(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveCategory", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function getSingleCategory(req, res) {
+  try {
+    return sendResponse(res, true, nul, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getSingleCategory", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function deleteCategory(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in deleteCategory", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+// DonatedItem
+
+export async function getAllDonatedItems(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllDonatedItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function getSingleDonatedItem(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getSingleDonatedItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function deleteDonatedItem(req, res) {
+  try {
+    return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch(error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in deleteDonatedItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
