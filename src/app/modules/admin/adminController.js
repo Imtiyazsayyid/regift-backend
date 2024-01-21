@@ -195,7 +195,7 @@ export async function saveOrganisation(req, res) {
       acronym,
       email,
       password,
-      website,
+      websiteUrl,
       logo,
       address,
       approvalStatus,
@@ -208,7 +208,7 @@ export async function saveOrganisation(req, res) {
       acronym,
       email,
       password,
-      website,
+      websiteUrl,
       logo,
       address,
       approvalStatus,
@@ -247,6 +247,7 @@ export async function saveOrganisation(req, res) {
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
+
 
 export async function getSingleOrganisation(req, res) {
   try {

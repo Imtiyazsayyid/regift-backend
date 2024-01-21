@@ -35,17 +35,13 @@ const organisationSchema = z.object({
     .string({ required_error: "Password is required" })
     .min(3, "Password is too short")
     .max(45, "Password is too long"),
-  website: z.string({ required_error: "Website is required" }).url(),
+  websiteUrl: z.string({ required_error: "Website is required" }).url(),
   address: z
     .string({ required_error: "Address is required" })
     .min(5, "Address is too short")
     .max(255, "Address is too long"),
-  approvalStatus: z
-    .string({ required_error: "Approval Status is required" })
-    .refine((data) => allowedApprovalStatus.includes(data), {
-      message: "Invalid approval status",
-    }),
 });
+
 
 const allowedCondtions = [
   "new",
