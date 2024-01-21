@@ -359,7 +359,9 @@ export async function deleteInventory(req, res) {
 
 export async function getAllCategories(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const categories = await prisma.category.findMany();
+
+    return sendResponse(res, true, categories, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in getAllCategories", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
@@ -401,7 +403,39 @@ export async function deleteCategory(req, res) {
 
 export async function getAllDonatedItems(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const { searchText, approvalStatus, categoryId } = req.query;
+
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        OR: [{ title: { contains: searchText } }],
+      };
+    }
+
+    if (approvalStatus) {
+      where = {
+        ...where,
+        approvalStatus,
+      };
+    }
+
+    if (categoryId) {
+      where = {
+        ...where,
+        categoryId: parseInt(categoryId),
+      };
+    }
+
+    const donatedItems = await prisma.donatedItem.findMany({
+      include: {
+        donor: true,
+        category: true,
+      },
+      where,
+    });
+    return sendResponse(res, true, donatedItems, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       res.originalUrl,
@@ -412,9 +446,36 @@ export async function getAllDonatedItems(req, res) {
   }
 }
 
-export async function getSingleDonatedItem(req, res) {
+export async function saveDonatedItem(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveCategory", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function getSingleDonatedItem(req, res) {
+  try {
+    const { id } = req.params;
+
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(
+        res,
+        false,
+        null,
+        "Invalid Donated Item ID",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    const donatedItem = await prisma.donatedItem.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, donatedItem, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       res.originalUrl,
