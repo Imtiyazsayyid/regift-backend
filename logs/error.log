@@ -52,3 +52,10 @@
 {"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors","timestamp":"2024-01-18T13:25:14.526Z"}
 {"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors","timestamp":"2024-01-18T13:25:15.891Z"}
 {"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors","timestamp":"2024-01-18T13:25:23.290Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=J","timestamp":"2024-01-21T05:43:26.418Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=Jo","timestamp":"2024-01-21T05:43:27.189Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=j","timestamp":"2024-01-21T05:44:36.729Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=jo","timestamp":"2024-01-21T05:44:37.144Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=joh","timestamp":"2024-01-21T05:44:37.390Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=njoh","timestamp":"2024-01-21T05:44:46.958Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Donor","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=","timestamp":"2024-01-21T06:30:49.895Z"}

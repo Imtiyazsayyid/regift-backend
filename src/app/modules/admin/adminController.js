@@ -9,7 +9,25 @@ import { donorSchema, organisationSchema } from "../validationSchema";
 
 export async function getAllDonors(req, res) {
   try {
-    const donors = await prisma.donor.findMany();
+    const { searchText } = req.query;
+
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        OR: [
+          { firstName: { contains: searchText } },
+          { lastName: { contains: searchText } },
+          { email: { contains: searchText } },
+        ],
+      };
+    }
+
+    const donors = await prisma.donor.findMany({
+      where,
+    });
+
     return sendResponse(res, true, donors, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in getAllDonors", error);
@@ -158,7 +176,7 @@ export async function saveOrganisation(req, res) {
       logo,
       address,
       approvalStatus,
-      status
+      status,
     } = req.body;
 
     const organisationData = {
@@ -171,11 +189,11 @@ export async function saveOrganisation(req, res) {
       logo,
       address,
       approvalStatus,
-      status
+      status,
     };
 
     const validation = organisationSchema.safeParse(organisationData);
-    if(!validation.success) {
+    if (!validation.success) {
       return sendResponse(
         res,
         false,
@@ -184,15 +202,15 @@ export async function saveOrganisation(req, res) {
         statusType.BAD_REQUEST
       );
     }
-    
+
     let savedOrganisation;
 
-    if(organisationBody.id){
+    if (organisationBody.id) {
       savedOrganisation = await prisma.organisation.update({
         data: organisationBody,
         where: {
           id: organisationBody.id,
-        }
+        },
       });
     } else {
       savedOrganisation = await prisma.organisation.create({
@@ -211,20 +229,20 @@ export async function getSingleOrganisation(req, res) {
   try {
     const { id } = req.params;
 
-    if(!id || !getIntOrNull(id)) {
+    if (!id || !getIntOrNull(id)) {
       return sendResponse(
         res,
         false,
         null,
         "Invalid Organisation id",
         statusType.BAD_REQUEST
-      )
-    } 
+      );
+    }
 
     const organisation = await prisma.organisation.findUnique({
       where: {
         id: parseInt(id),
-      }
+      },
     });
 
     return sendResponse(res, true, organisation, "Success");
@@ -242,19 +260,19 @@ export async function deleteOrganisation(req, res) {
   try {
     const { id } = req.params;
 
-    if(!id || !getIntOrNull(id)){
+    if (!id || !getIntOrNull(id)) {
       return sendResponse(
         res,
         null,
         "Invalid Organisation id",
         statusType.BAD_REQUEST
-      )
+      );
     }
 
     const deletedOrganisation = await prisma.organisation.delete({
       where: {
         id: parseInt(id),
-      }
+      },
     });
     return sendResponse(res, true, deletedOrganisation, "Success");
   } catch (error) {
@@ -313,13 +331,12 @@ export async function deleteInventory(req, res) {
   }
 }
 
-
 // Category
 
 export async function getAllCategories(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch(error) {
+  } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in getAllCategories", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
@@ -337,8 +354,12 @@ export async function saveCategory(req, res) {
 export async function getSingleCategory(req, res) {
   try {
     return sendResponse(res, true, nul, "Api Not Ready Yet");
-  } catch(error) {
-    logger.consoleErrorLog(res.originalUrl, "Error in getSingleCategory", error);
+  } catch (error) {
+    logger.consoleErrorLog(
+      res.originalUrl,
+      "Error in getSingleCategory",
+      error
+    );
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
@@ -346,7 +367,7 @@ export async function getSingleCategory(req, res) {
 export async function deleteCategory(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch(error) {
+  } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteCategory", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
@@ -357,8 +378,12 @@ export async function deleteCategory(req, res) {
 export async function getAllDonatedItems(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch(error) {
-    logger.consoleErrorLog(res.originalUrl, "Error in getAllDonatedItems", error);
+  } catch (error) {
+    logger.consoleErrorLog(
+      res.originalUrl,
+      "Error in getAllDonatedItems",
+      error
+    );
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
@@ -366,8 +391,12 @@ export async function getAllDonatedItems(req, res) {
 export async function getSingleDonatedItem(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch(error) {
-    logger.consoleErrorLog(res.originalUrl, "Error in getSingleDonatedItems", error);
+  } catch (error) {
+    logger.consoleErrorLog(
+      res.originalUrl,
+      "Error in getSingleDonatedItems",
+      error
+    );
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
@@ -375,8 +404,12 @@ export async function getSingleDonatedItem(req, res) {
 export async function deleteDonatedItem(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch(error) {
-    logger.consoleErrorLog(res.originalUrl, "Error in deleteDonatedItems", error);
+  } catch (error) {
+    logger.consoleErrorLog(
+      res.originalUrl,
+      "Error in deleteDonatedItems",
+      error
+    );
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
