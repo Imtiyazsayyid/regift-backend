@@ -188,66 +188,66 @@ export async function getAllOrganisations(req, res) {
 }
 
 export async function saveOrganisation(req, res) {
-  try {
-    const {
-      id,
-      name,
-      acronym,
-      email,
-      password,
-      websiteUrl,
-      logo,
-      address,
-      approvalStatus,
-      status,
-    } = req.body;
+  // try {
+  const {
+    id,
+    name,
+    acronym,
+    email,
+    password,
+    websiteUrl,
+    logo,
+    address,
+    approvalStatus,
+    status,
+  } = req.body;
 
-    const organisationData = {
-      id,
-      name,
-      acronym,
-      email,
-      password,
-      websiteUrl,
-      logo,
-      address,
-      approvalStatus,
-      status,
-    };
+  const organisationData = {
+    id,
+    name,
+    acronym,
+    email,
+    password,
+    websiteUrl,
+    logo,
+    address,
+    approvalStatus: approvalStatus || "pending",
+    status,
+  };
 
-    const validation = organisationSchema.safeParse(organisationData);
-    if (!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        organisationData,
-        "Error",
-        statusType.BAD_REQUEST
-      );
-    }
+  const validation = organisationSchema.safeParse(organisationData);
 
-    let savedOrganisation;
-
-    if (organisationData.id) {
-      savedOrganisation = await prisma.organisation.update({
-        data: organisationData,
-        where: {
-          id: organisationData.id,
-        },
-      });
-    } else {
-      savedOrganisation = await prisma.organisation.create({
-        data: organisationData,
-      });
-    }
-
-    return sendResponse(res, true, organisationData, "Success");
-  } catch (error) {
-    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
-    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  if (!validation.success) {
+    return sendResponse(
+      res,
+      false,
+      organisationData,
+      "Error",
+      statusType.BAD_REQUEST
+    );
   }
-}
 
+  let savedOrganisation;
+
+  if (organisationData.id) {
+    savedOrganisation = await prisma.organisation.update({
+      data: organisationData,
+      where: {
+        id: organisationData.id,
+      },
+    });
+  } else {
+    savedOrganisation = await prisma.organisation.create({
+      data: organisationData,
+    });
+  }
+
+  return sendResponse(res, true, organisationData, "Success");
+  // } catch (error) {
+  //   logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+  //   return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  // }
+}
 
 export async function getSingleOrganisation(req, res) {
   try {

@@ -72,3 +72,5 @@
 {"error":{},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-21T16:19:52.926Z"}
 {"error":{},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-21T16:19:54.294Z"}
 {"error":{},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-21T16:19:54.295Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/admin/organisations","timestamp":"2024-01-21T17:23:53.246Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/admin/organisations","timestamp":"2024-01-21T17:24:02.761Z"}
