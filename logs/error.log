@@ -61,3 +61,7 @@
 {"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Donor","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in getAllDonors","route":"/api/admin/donors?searchText=","timestamp":"2024-01-21T06:30:49.895Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllOrganisations","route":"/api/admin/organisations?searchText=&approvalStatus=all","timestamp":"2024-01-21T07:58:35.944Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllOrganisations","route":"/api/admin/organisations?searchText=&approvalStatus=all","timestamp":"2024-01-21T07:58:35.953Z"}
+{"error":{},"level":"error","message":"Error in saveDonor","route":"/api/admin/donors","timestamp":"2024-01-21T09:32:29.111Z"}
+{"error":{},"level":"error","message":"Error in saveDonor","route":"/api/admin/donors","timestamp":"2024-01-21T09:33:07.926Z"}
+{"error":{},"level":"error","message":"Error in saveDonor","route":"/api/admin/donors","timestamp":"2024-01-21T09:33:14.961Z"}
+{"error":{},"level":"error","message":"Error in saveDonor","route":"/api/admin/donors","timestamp":"2024-01-21T09:33:59.052Z"}

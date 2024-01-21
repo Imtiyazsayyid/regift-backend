@@ -62,6 +62,7 @@ export async function saveDonor(req, res) {
     };
 
     const validation = donorSchema.safeParse(donorData);
+
     if (!validation.success) {
       return sendResponse(
         res,
@@ -74,16 +75,16 @@ export async function saveDonor(req, res) {
 
     let savedDonor;
 
-    if (donorBody.id) {
+    if (donorData.id) {
       savedDonor = await prisma.donor.update({
-        data: donorBody,
+        data: donorData,
         where: {
-          id: donorBody.id,
+          id: donorData.id,
         },
       });
     } else {
       savedDonor = await prisma.donor.create({
-        data: donorBody,
+        data: donorData,
       });
     }
 

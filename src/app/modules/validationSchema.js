@@ -21,18 +21,16 @@ const donorSchema = z.object({
     .refine((data) => allowedGenders.includes(data), {
       message: "Invalid gender",
     }),
-  donatedItem: z.array(donatedItemSchema)
 });
 
-const allowedApprovalStatus = [ "pending", "approved", "rejected" ];
+const allowedApprovalStatus = ["pending", "approved", "rejected"];
 
 const organisationSchema = z.object({
   name: z
     .string({ required_error: "Name is required" })
     .min(2, "Name is too short")
     .max(100, "Name is too long"),
-  email: z
-    .string({ required_error: "Email is required" }).email(),
+  email: z.string({ required_error: "Email is required" }).email(),
   password: z
     .string({ required_error: "Password is required" })
     .min(3, "Password is too short")
@@ -49,26 +47,32 @@ const organisationSchema = z.object({
     }),
 });
 
-const allowedCondtions = [ "new", "like_new", "used_good", "used_fair", "used_poor"];
+const allowedCondtions = [
+  "new",
+  "like_new",
+  "used_good",
+  "used_fair",
+  "used_poor",
+];
 
-const donatedItemSchema = z.object ({
+const donatedItemSchema = z.object({
   title: z
     .string({ required_error: "Title is required" })
     .min(2, "Title is too short")
     .max(100, "Title is too long"),
-  quantity: z
-    .number({ required_error: "Quantity is required" }),
+  quantity: z.number({ required_error: "Quantity is required" }),
   condition: z
     .string({ required_error: "Condition is required" })
     .refine((data) => allowedCondtions.includes(data), {
       message: "Invalid condition",
     }),
-  pickupAddress: z
-    .string({ required_error: "pickAddress is required" }),
-  isPickupAvailable: z
-    .boolean({ required_error: "Is Pickup Available is required "}),
+  pickupAddress: z.string({ required_error: "pickAddress is required" }),
+  isPickupAvailable: z.boolean({
+    required_error: "Is Pickup Available is required ",
+  }),
   contackEmail: z
-    .string({ required_error: "Contact Email is required "}).email(),
+    .string({ required_error: "Contact Email is required " })
+    .email(),
   approvalStatus: z
     .string({ required_error: "Approval Status is required" })
     .refine((data) => allowedApprovalStatus.includes(data), {
@@ -76,11 +80,9 @@ const donatedItemSchema = z.object ({
     }),
 
   // Relationship ( user, category ) fields is missing..
-  
-  categoryId: z
-    .number({ required_error: "Category Id is required" }),
-  userId: z
-    .number({ required_error: "User Id is required" }),
+
+  categoryId: z.number({ required_error: "Category Id is required" }),
+  userId: z.number({ required_error: "User Id is required" }),
 });
 
 const categorySchema = z.object({
@@ -96,4 +98,3 @@ const categorySchema = z.object({
 });
 
 export { donorSchema, organisationSchema, donatedItemSchema, categorySchema };
-
