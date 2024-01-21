@@ -13,7 +13,7 @@ router.route("/organisations").get(adminController.getAllOrganisations);
 router.route("/organisations").post(adminController.saveOrganisation);
 router.route("/organisation/:id").get(adminController.getSingleOrganisation);
 router.route("/organisation/:id").delete(adminController.deleteOrganisation);
- 
+
 // Inventory
 router.route("/inventories").get(adminController.getAllInventories);
 router.route("/inventories").post(adminController.saveInventory);
@@ -28,7 +28,7 @@ router.route("/category/:id").delete(adminController.deleteCategory);
 
 // Donated Item
 router.route("/donated-items").get(adminController.getAllDonatedItems);
-router.route("/donated-tem/:id").get(adminController.getSingleDonatedItem);
+router.route("/donated-item/:id").get(adminController.getSingleDonatedItem);
 router.route("/donated-item/:id").delete(adminController.deleteDonatedItem);
 
 export default router;

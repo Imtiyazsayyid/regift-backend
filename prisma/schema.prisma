@@ -73,12 +73,12 @@ model Category {
 
 model DonatedItem {
   id                Int            @id @default(autoincrement())
+  image             String         @db.Text
   title             String
   description       String?        @db.Text
   quantity          Int
   condition         Condition
   pickupAddress     String?        @db.Text
-  isPickupAvailable Boolean        @default(false)
   approvalStatus    ApprovalStatus @default(pending)
 
   donorId Int
