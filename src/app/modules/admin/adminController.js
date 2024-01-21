@@ -152,7 +152,7 @@ export async function deleteDonor(req, res) {
 
 export async function getAllOrganisations(req, res) {
   try {
-    const { searchText } = req.query;
+    const { searchText, approvalStatus } = req.query;
 
     let where = {};
 
@@ -164,6 +164,13 @@ export async function getAllOrganisations(req, res) {
           { acronym: { contains: searchText } },
           { email: { contains: searchText } },
         ],
+      };
+    }
+
+    if (approvalStatus) {
+      where = {
+        ...where,
+        approvalStatus,
       };
     }
 
