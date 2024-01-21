@@ -152,7 +152,22 @@ export async function deleteDonor(req, res) {
 
 export async function getAllOrganisations(req, res) {
   try {
-    const organisations = await prisma.organisation.findMany();
+    const { searchText } = req.query;
+
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        OR: [
+          { name: { contains: searchText } },
+          { acronym: { contains: searchText } },
+          { email: { contains: searchText } },
+        ],
+      };
+    }
+
+    const organisations = await prisma.organisation.findMany({ where });
     return sendResponse(res, true, organisations, "Success");
   } catch (error) {
     logger.consoleErrorLog(
@@ -205,16 +220,16 @@ export async function saveOrganisation(req, res) {
 
     let savedOrganisation;
 
-    if (organisationBody.id) {
+    if (organisationData.id) {
       savedOrganisation = await prisma.organisation.update({
-        data: organisationBody,
+        data: organisationData,
         where: {
-          id: organisationBody.id,
+          id: organisationData.id,
         },
       });
     } else {
       savedOrganisation = await prisma.organisation.create({
-        data: organisationBody,
+        data: organisationData,
       });
     }
 
