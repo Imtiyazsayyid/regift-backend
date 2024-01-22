@@ -68,8 +68,8 @@ const donatedItemSchema = z.object({
       message: "Invalid approval status",
     }),
 
-  categoryId: z.number({ required_error: "Category Id is required" }),
-  userId: z.number({ required_error: "User Id is required" }),
+  categoryId: z.number({ required_error: "Category is required" }),
+  donorId: z.number({ required_error: "User Id is required" }),
 });
 
 const categorySchema = z.object({

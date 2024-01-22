@@ -3,7 +3,11 @@ import logger from "@/@core/services/LoggingService";
 import { sendResponse } from "@core/services/ResponseService";
 import prisma from "@/@core/helpers/prisma";
 import { getIntOrNull } from "@/@core/helpers/commonHelpers";
-import { donorSchema, organisationSchema } from "../validationSchema";
+import {
+  donatedItemSchema,
+  donorSchema,
+  organisationSchema,
+} from "../validationSchema";
 
 // Donor Functions
 
@@ -448,9 +452,60 @@ export async function getAllDonatedItems(req, res) {
 
 export async function saveDonatedItem(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const {
+      id,
+      title,
+      image,
+      condition,
+      approvalStatus,
+      categoryId,
+      quantity,
+      description,
+      donorId,
+    } = req.body;
+
+    const donatedItemData = {
+      id,
+      title,
+      image,
+      condition,
+      approvalStatus,
+      categoryId,
+      quantity,
+      description,
+      donorId,
+    };
+
+    const validation = donatedItemSchema.safeParse(donatedItemData);
+
+    if (!validation.success) {
+      return sendResponse(
+        res,
+        false,
+        donatedItemData,
+        "Error",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    let savedDonatedItem;
+
+    if (donatedItemData.id) {
+      savedDonatedItem = await prisma.donatedItem.update({
+        data: donatedItemData,
+        where: {
+          id: donatedItemData.id,
+        },
+      });
+    } else {
+      savedDonatedItem = await prisma.donatedItem.create({
+        data: donatedItemData,
+      });
+    }
+
+    return sendResponse(res, true, savedDonatedItem, "Success");
   } catch (error) {
-    logger.consoleErrorLog(req.originalUrl, "Error in saveCategory", error);
+    logger.consoleErrorLog(req.originalUrl, "Error in saveDonatedItem", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }

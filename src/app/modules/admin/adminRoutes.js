@@ -28,6 +28,7 @@ router.route("/category/:id").delete(adminController.deleteCategory);
 
 // Donated Item
 router.route("/donated-items").get(adminController.getAllDonatedItems);
+router.route("/donated-items").post(adminController.saveDonatedItem);
 router.route("/donated-item/:id").get(adminController.getSingleDonatedItem);
 router.route("/donated-item/:id").delete(adminController.deleteDonatedItem);
 
