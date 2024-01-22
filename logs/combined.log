@@ -112,3 +112,7 @@
 {"level":"info","message":"No authorization Token Provided","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T13:14:52.332Z"}
 {"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-22T13:14:52.334Z"}
 {"level":"info","message":"No authorization Token Provided","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T13:14:52.335Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-22T13:45:11.858Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T13:45:11.859Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-22T13:45:11.860Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T13:45:11.861Z"}

@@ -31,8 +31,6 @@ export default async function authMiddleware(req, res, next) {
       );
     }
 
-    console.log({ decoded });
-
     const user = await prisma.admin.findUnique({
       where: { id: decoded.user_id },
     });
