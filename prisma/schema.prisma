@@ -53,6 +53,8 @@ model Organisation {
   address        String         @db.Text
   approvalStatus ApprovalStatus @default(pending)
 
+  orders Order[]
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
@@ -72,14 +74,16 @@ model Category {
 }
 
 model DonatedItem {
-  id                Int            @id @default(autoincrement())
-  image             String         @db.Text
-  title             String
-  description       String?        @db.Text
-  quantity          Int
-  condition         Condition
-  pickupAddress     String?        @db.Text
-  approvalStatus    ApprovalStatus @default(pending)
+  id             Int            @id @default(autoincrement())
+  image          String         @db.Text
+  title          String
+  description    String?        @db.Text
+  quantity       Int
+  condition      Condition
+  pickupAddress  String?        @db.Text
+  approvalStatus ApprovalStatus @default(pending)
+
+  isAvailable    Boolean        @default(true)
 
   donorId Int
   donor   Donor @relation(fields: [donorId], references: [id])
@@ -87,9 +91,30 @@ model DonatedItem {
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
 
+  orders Order[]
+
   status     Boolean  @default(true)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+}
+
+model Order {
+  id             Int          @id @default(autoincrement())
+  organisationId Int
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  donatedItemId  Int
+  donatedItem    DonatedItem  @relation(fields: [donatedItemId], references: [id])
+
+  orderStatus OrderStatus
+}
+
+enum OrderStatus {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  cancelled
 }
 
 enum Condition {

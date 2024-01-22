@@ -313,52 +313,6 @@ export async function deleteOrganisation(req, res) {
   }
 }
 
-// Inventory Functions
-
-export async function getAllInventories(req, res) {
-  try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch (error) {
-    logger.consoleErrorLog(
-      req.originalUrl,
-      "Error in getAllInventories",
-      error
-    );
-    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
-  }
-}
-
-export async function saveInventory(req, res) {
-  try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch (error) {
-    logger.consoleErrorLog(req.originalUrl, "Error in saveInventory", error);
-    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
-  }
-}
-
-export async function getSingleInventory(req, res) {
-  try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch (error) {
-    logger.consoleErrorLog(
-      req.originalUrl,
-      "Error in getSingleInventory",
-      error
-    );
-    return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
-  }
-}
-
-export async function deleteInventory(req, res) {
-  try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
-  } catch (error) {
-    logger.consoleErrorLog(req.originalUrl, "Error in deleteInventory", error);
-    return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
-  }
-}
-
 // Category
 
 export async function getAllCategories(req, res) {
@@ -407,7 +361,8 @@ export async function deleteCategory(req, res) {
 
 export async function getAllDonatedItems(req, res) {
   try {
-    const { searchText, approvalStatus, categoryId } = req.query;
+    const { searchText, approvalStatus, categoryId, condition, availability } =
+      req.query;
 
     let where = {};
 
@@ -429,6 +384,20 @@ export async function getAllDonatedItems(req, res) {
       where = {
         ...where,
         categoryId: parseInt(categoryId),
+      };
+    }
+
+    if (condition) {
+      where = {
+        ...where,
+        condition,
+      };
+    }
+
+    if (availability) {
+      where = {
+        ...where,
+        isAvailable: availability == "true" ? true : false,
       };
     }
 
