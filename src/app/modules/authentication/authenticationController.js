@@ -9,6 +9,7 @@ import prisma from "@core/helpers/prisma";
 import { hash } from "@core/securityService/CryptoClient";
 import {
   jwtAccessTokenEncode,
+  jwtDecode,
   jwtRefreshTokenEncode,
   jwtRefreshTokenVerify,
 } from "@core/securityService/JwtClient";
@@ -18,6 +19,7 @@ export async function login(req, res) {
     const body = {
       email: req.body.email,
       password: req.body.password,
+      user_role: "admin",
     };
 
     const validate = validateLogin(body);
@@ -26,22 +28,26 @@ export async function login(req, res) {
       return sendResponse(res, false, null, "Fields validation failed!");
     }
 
-    const user = await prisma.u_user.findFirst({
-      where: {
-        user_email: body.email,
-        user_is_active: true,
-      },
-    });
+    let user;
+
+    if (body.user_role === "admin") {
+      user = await prisma.admin.findFirst({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
 
     if (!user) {
       return sendResponse(res, false, null, "No Such User");
     }
 
-    if (user.user_password !== hash(body.password)) {
+    if (user.password !== body.password) {
       return sendResponse(res, false, null, "No Such User");
     }
 
-    const payload = { user_id: user.user_id };
+    const payload = { user_id: user.id, user_role: body.user_role };
     const refreshToken = jwtRefreshTokenEncode(payload);
 
     return sendResponse(res, true, refreshToken, "Login Successfull");
@@ -101,7 +107,7 @@ export async function register(req, res) {
 
 export async function getAccessToken(req, res) {
   try {
-    const refreshToken = req.headers.Authorization;
+    const refreshToken = req.body.refreshToken;
 
     const decoded = jwtRefreshTokenVerify(refreshToken);
 
@@ -110,23 +116,27 @@ export async function getAccessToken(req, res) {
         res,
         false,
         null,
-        "Refresh Token No Valid",
+        "Refresh Token Not Valid",
         statusType.UNAUTHORIZED
       );
     }
 
-    const user = await prisma.u_user.findFirst({
-      where: {
-        user_id: decoded.user_id,
-        user_is_active: true,
-      },
-    });
+    let user;
+
+    if (decoded.user_role === "admin") {
+      user = await prisma.admin.findUnique({
+        where: {
+          id: decoded.user_id,
+          status: true,
+        },
+      });
+    }
 
     if (!user) {
       return sendResponse(res, false, null, "No such user!");
     }
 
-    const payload = { user_id: user.user_id };
+    const payload = { user_id: user.id, user_role: decoded.user_role };
     const accessToken = jwtAccessTokenEncode(payload);
 
     return sendResponse(res, true, accessToken, "Access Token");

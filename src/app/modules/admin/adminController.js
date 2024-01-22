@@ -9,6 +9,18 @@ import {
   organisationSchema,
 } from "../validationSchema";
 
+// Admin Details
+export async function getAdminDetails(req, res) {
+  try {
+    const admin = await prisma.admin.findFirst();
+
+    return sendResponse(res, true, admin, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in getAllDonors", error);
+    return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
+  }
+}
+
 // Donor Functions
 
 export async function getAllDonors(req, res) {

@@ -76,3 +76,26 @@
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/admin/organisations","timestamp":"2024-01-21T17:24:02.761Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-22T08:09:02.694Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-22T08:09:02.700Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T11:49:44.899Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T11:50:51.511Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T11:52:02.332Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T11:52:19.679Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T11:52:30.443Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:04:37.388Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:04:50.167Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:05:27.616Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:05:45.109Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:07:01.637Z"}
+{"error":{},"level":"error","message":"Error in jwtRefreshTokenEncode","route":"core","timestamp":"2024-01-22T12:07:35.909Z"}
+{"error":{},"level":"error","message":"Error in login","route":"/api/admin/auth/login","timestamp":"2024-01-22T12:09:58.132Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Error in jwtRefreshTokenVerify","route":"core","timestamp":"2024-01-22T12:22:24.545Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Error in jwtRefreshTokenVerify","route":"core","timestamp":"2024-01-22T12:24:43.795Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Error in jwtRefreshTokenVerify","route":"core","timestamp":"2024-01-22T12:25:25.548Z"}
+{"error":{"message":"jwt must be provided","name":"JsonWebTokenError"},"level":"error","message":"Error in jwtRefreshTokenVerify","route":"core","timestamp":"2024-01-22T12:27:02.742Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:35:25.983Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:35:25.989Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:35:55.781Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:35:55.787Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:36:45.164Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donors?searchText=","timestamp":"2024-01-22T12:36:45.167Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Admin","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/details","timestamp":"2024-01-22T13:14:49.624Z"}
