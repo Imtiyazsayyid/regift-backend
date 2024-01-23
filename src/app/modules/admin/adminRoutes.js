@@ -3,7 +3,7 @@ const router = express.Router();
 
 import * as adminController from "./adminController";
 import authRoutes from "../authentication/authenticationRoutes";
-import adminMiddleware from "@/app/middlewares/adminMiddleware";
+import adminMiddleware from "../../middlewares/adminMiddleware";
 
 router.use("/auth", authRoutes);
 router.use(adminMiddleware);
