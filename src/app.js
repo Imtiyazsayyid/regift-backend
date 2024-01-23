@@ -4,7 +4,7 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 
-import router from "@/app/router";
+import router from "./app/router";
 
 const app = express();
 
