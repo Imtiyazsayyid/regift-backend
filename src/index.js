@@ -1,6 +1,6 @@
 import "module-alias/register";
 import http from "http";
-import app from "@/app.js";
+import app from "./app";
 
 const server = http.createServer(app);
 
