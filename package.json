@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A Starter Project In Node Using ExpressJS",
   "main": "./src/server.js",
+  "engines": {
+    "node": "14.x"
+  },
   "prisma": {
     "seed": "node prisma/seed.mjs"
   },
