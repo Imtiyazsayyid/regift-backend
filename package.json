@@ -9,7 +9,6 @@
   "prisma": {
     "seed": "node prisma/seed.mjs"
   },
-  "vercel-build": "npx prisma generate && next build",
   "scripts": {
     "build": "prisma generate && babel src -d dist",
     "dev": "kill-port 8003 && nodemon ./src/index.js --exec babel-node",
