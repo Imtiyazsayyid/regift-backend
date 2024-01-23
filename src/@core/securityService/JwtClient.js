@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import logger from "@core/services/LoggingService";
+import logger from "../services/LoggingService";
 
 export function jwtRefreshTokenEncode(payload) {
   try {

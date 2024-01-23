@@ -1,6 +1,6 @@
-import { sendResponse } from "@core/services/ResponseService";
-import statusType from "@core/enum/statusTypes";
-import logger from "@core/services/LoggingService";
+import { sendResponse } from "../../../@core/services/ResponseService";
+import statusType from "../../../@core/enum/statusTypes";
+import logger from "../../../@core/services/LoggingService";
 
 export async function getHome(req, res) {
   try {

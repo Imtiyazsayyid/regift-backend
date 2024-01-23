@@ -1,4 +1,4 @@
-import core from "@core/core";
+import core from "../../../@core/core";
 
 export async function Function(req, res) {
   try {

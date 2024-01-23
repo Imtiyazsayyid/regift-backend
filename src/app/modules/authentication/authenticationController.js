@@ -1,18 +1,18 @@
-import { sendResponse } from "@core/services/ResponseService";
-import statusType from "@core/enum/statusTypes";
-import logger from "@core/services/LoggingService";
+import { sendResponse } from "../../../@core/services/ResponseService";
+import statusType from "../../../@core/enum/statusTypes";
+import logger from "../../../@core/services/LoggingService";
 import {
   validateLogin,
   validateRegister,
-} from "@core/helpers/validationHelper";
-import prisma from "@core/helpers/prisma";
-import { hash } from "@core/securityService/CryptoClient";
+} from "../../../@core/helpers/validationHelper";
+import prisma from "../../../@core/helpers/prisma";
+import { hash } from "../../../@core/securityService/CryptoClient";
 import {
   jwtAccessTokenEncode,
   jwtDecode,
   jwtRefreshTokenEncode,
   jwtRefreshTokenVerify,
-} from "@core/securityService/JwtClient";
+} from "../../../@core/securityService/JwtClient";
 
 export async function login(req, res) {
   try {
