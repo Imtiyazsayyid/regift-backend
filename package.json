@@ -2,7 +2,7 @@
   "name": "node-express-starter",
   "version": "1.0.0",
   "description": "A Starter Project In Node Using ExpressJS",
-  "main": "./src/server.js",
+  "main": "./src/index.js",
   "engines": {
     "node": "18.x"
   },
@@ -11,8 +11,8 @@
   },
   "scripts": {
     "build": "babel src -d dist",
-    "dev": "kill-port 8003 && nodemon ./src/server.js --exec babel-node",
-    "start": "node ./dist/server.js",
+    "dev": "kill-port 8003 && nodemon ./src/index.js --exec babel-node",
+    "start": "node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rv",
