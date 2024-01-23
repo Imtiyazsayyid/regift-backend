@@ -18,8 +18,8 @@
   "author": "Rv",
   "license": "ISC",
   "_moduleAliases": {
-    "@": "./src",
-    "@core": "./src/@core"
+    "@": "src",
+    "@core": "src/@core"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.4",
