@@ -1,4 +1,6 @@
 import winston from "winston";
+import fs from "fs";
+import path from "path";
 
 import logType from "../enum/logType";
 
@@ -8,6 +10,12 @@ class LoggingService {
       (process.env.NODE_ENV && process.env.NODE_ENV) === "production"
         ? false
         : true;
+
+    const logDir = path.join(__dirname, "logs");
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir);
+    }
+
     this.logger = winston.createLogger({
       levels: winston.config.npm.levels,
       level: logType.DEBUG,
@@ -19,10 +27,12 @@ class LoggingService {
       transports: [
         new winston.transports.Console(),
         new winston.transports.File({
-          filename: "./logs/error.log",
+          filename: path.join(logDir, "error.log"), // Use path.join to ensure correct path
           level: "error",
         }),
-        new winston.transports.File({ filename: "./logs/combined.log" }),
+        new winston.transports.File({
+          filename: path.join(logDir, "combined.log"),
+        }), // Use path.join to ensure correct path
       ],
     });
   }
