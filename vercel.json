@@ -1,8 +1,9 @@
 {
   "functions": {
-    "index.js": {
-      "runtime": "@vercel/node@2.7.0"
+    "api": {
+      "runtime": "@vercel/node@2.7.0",
+      "handler": "index.handler"
     }
   },
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.js" }]
+  "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }]
 }
