@@ -12,7 +12,13 @@ import {
 // Admin Details
 export async function getAdminDetails(req, res) {
   try {
-    const admin = await prisma.admin.findFirst();
+    const { id } = req.app.settings.userInfo;
+
+    const admin = await prisma.admin.findUnique({
+      where: {
+        id,
+      },
+    });
 
     return sendResponse(res, true, admin, "Success");
   } catch (error) {

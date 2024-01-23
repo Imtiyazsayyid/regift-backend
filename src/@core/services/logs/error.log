@@ -1,0 +1,8 @@
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:26:44.115Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:26:44.134Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:27:26.451Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:27:26.471Z"}
+{"error":{},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/details","timestamp":"2024-01-23T19:29:14.022Z"}
+{"error":{},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/details","timestamp":"2024-01-23T19:29:14.045Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:30:34.329Z"}
+{"error":{},"level":"error","message":"Error in getAllDonors","route":"/api/admin/details","timestamp":"2024-01-23T19:30:34.345Z"}
