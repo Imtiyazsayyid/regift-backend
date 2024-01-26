@@ -11,4 +11,7 @@ router.use(organisationMiddleware);
 // Organisation Details
 router.route("/details").get(organisationController.getOrganisationDetails);
 
+// Donated Items
+router.route("/donated-items").get(organisationController.getAllDonatedItems);
+
 export default router;
