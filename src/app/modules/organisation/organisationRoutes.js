@@ -9,6 +9,6 @@ router.use("/auth", authRoutes);
 router.use(organisationMiddleware);
 
 // Organisation Details
-// router.route("/details").get(adminController.getAdminDetails);
+router.route("/details").get(organisationController.getOrganisationDetails);
 
 export default router;

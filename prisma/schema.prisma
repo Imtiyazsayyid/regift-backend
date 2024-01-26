@@ -15,7 +15,7 @@ model Admin {
   id         Int     @id @default(autoincrement())
   firstName  String
   lastName   String
-  email      String
+  email      String @unique
   password   String
   gender     Gender
   profileImg String? @db.Text
@@ -30,7 +30,7 @@ model Donor {
   id         Int     @id @default(autoincrement())
   firstName  String
   lastName   String
-  email      String
+  email      String  @unique
   password   String
   gender     Gender
   profileImg String? @db.Text
@@ -47,7 +47,7 @@ model Organisation {
   id             Int            @id @default(autoincrement())
   name           String
   acronym        String?
-  email          String
+  email          String     @unique
   password       String
   websiteUrl     String?
   logo           String?        @db.Text

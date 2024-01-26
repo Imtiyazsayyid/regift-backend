@@ -31,7 +31,16 @@ export async function login(req, res) {
     let user;
 
     if (body.user_role === "admin") {
-      user = await prisma.admin.findFirst({
+      user = await prisma.admin.findUnique({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
         where: {
           email: body.email,
           status: true,

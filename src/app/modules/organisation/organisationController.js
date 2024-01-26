@@ -8,3 +8,25 @@ import {
   donorSchema,
   organisationSchema,
 } from "../validationSchema";
+
+// Admin Details
+export async function getOrganisationDetails(req, res) {
+  try {
+    const { id } = req.app.settings.userInfo;
+
+    const organisation = await prisma.organisation.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return sendResponse(res, true, organisation, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(
+      req.originalUrl,
+      "Error in getOrganisationDetails",
+      error
+    );
+    return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
+  }
+}
