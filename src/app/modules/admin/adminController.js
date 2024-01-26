@@ -379,8 +379,14 @@ export async function deleteCategory(req, res) {
 
 export async function getAllDonatedItems(req, res) {
   try {
-    const { searchText, approvalStatus, categoryId, condition, availability } =
-      req.query;
+    const {
+      searchText,
+      approvalStatus,
+      categoryId,
+      condition,
+      availability,
+      isPickedUp,
+    } = req.query;
 
     let where = {};
 
@@ -419,6 +425,13 @@ export async function getAllDonatedItems(req, res) {
       };
     }
 
+    if (isPickedUp) {
+      where = {
+        ...where,
+        isPickedUp: isPickedUp == "true" ? true : false,
+      };
+    }
+
     const donatedItems = await prisma.donatedItem.findMany({
       include: {
         donor: true,
@@ -445,8 +458,8 @@ export async function saveDonatedItem(req, res) {
       image,
       condition,
       approvalStatus,
+      isPickedUp,
       categoryId,
-      quantity,
       description,
       donorId,
     } = req.body;
@@ -456,9 +469,9 @@ export async function saveDonatedItem(req, res) {
       title,
       image,
       condition,
+      isPickedUp,
       approvalStatus,
       categoryId,
-      quantity,
       description,
       donorId,
     };

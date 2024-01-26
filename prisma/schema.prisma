@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-  relationMode = "prisma"
+  // relationMode = "prisma"
 }
 
 model Admin {
@@ -79,12 +79,12 @@ model DonatedItem {
   image          String         @db.Text
   title          String
   description    String?        @db.Text
-  quantity       Int
   condition      Condition
   pickupAddress  String?        @db.Text
   approvalStatus ApprovalStatus @default(pending)
 
-  isAvailable    Boolean        @default(true)
+  isAvailable Boolean @default(true) // check If item is already delivered to organisation
+  isPickedUp  Boolean @default(false) // check if order has been picked up from donor
 
   donorId Int
   donor   Donor @relation(fields: [donorId], references: [id])
