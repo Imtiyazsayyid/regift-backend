@@ -19,7 +19,7 @@ export async function login(req, res) {
     const body = {
       email: req.body.email,
       password: req.body.password,
-      user_role: "admin",
+      user_role: req.body.user_role,
     };
 
     const validate = validateLogin(body);
@@ -39,6 +39,15 @@ export async function login(req, res) {
       });
     }
 
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findFirst({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
     if (!user) {
       return sendResponse(res, false, null, "No Such User");
     }
@@ -49,6 +58,8 @@ export async function login(req, res) {
 
     const payload = { user_id: user.id, user_role: body.user_role };
     const refreshToken = jwtRefreshTokenEncode(payload);
+
+    console.log({ refreshToken });
 
     return sendResponse(res, true, refreshToken, "Login Successfull");
   } catch (error) {
@@ -125,6 +136,15 @@ export async function getAccessToken(req, res) {
 
     if (decoded.user_role === "admin") {
       user = await prisma.admin.findUnique({
+        where: {
+          id: decoded.user_id,
+          status: true,
+        },
+      });
+    }
+
+    if (decoded.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
         where: {
           id: decoded.user_id,
           status: true,

@@ -11,3 +11,7 @@
 {"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Admin","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donated-items","timestamp":"2024-01-26T07:17:19.246Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Admin","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/donated-items?searchText=&approvalStatus=&categoryId=&condition=&availability=true","timestamp":"2024-01-26T07:17:27.709Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Admin","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in accessMiddleware ","route":"/api/admin/categories","timestamp":"2024-01-26T07:17:27.717Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-26T09:51:59.043Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-26T09:51:59.047Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-26T09:57:58.595Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/admin/details","timestamp":"2024-01-26T09:57:58.601Z"}
