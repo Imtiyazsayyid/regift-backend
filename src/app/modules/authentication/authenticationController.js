@@ -19,7 +19,7 @@ export async function login(req, res) {
     const body = {
       email: req.body.email,
       password: req.body.password,
-      user_role: "admin",
+      user_role: req.body.user_role,
     };
 
     const validate = validateLogin(body);
@@ -31,7 +31,16 @@ export async function login(req, res) {
     let user;
 
     if (body.user_role === "admin") {
-      user = await prisma.admin.findFirst({
+      user = await prisma.admin.findUnique({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
         where: {
           email: body.email,
           status: true,
@@ -125,6 +134,15 @@ export async function getAccessToken(req, res) {
 
     if (decoded.user_role === "admin") {
       user = await prisma.admin.findUnique({
+        where: {
+          id: decoded.user_id,
+          status: true,
+        },
+      });
+    }
+
+    if (decoded.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
         where: {
           id: decoded.user_id,
           status: true,
