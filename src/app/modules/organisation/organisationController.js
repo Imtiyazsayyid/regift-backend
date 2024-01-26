@@ -9,7 +9,7 @@ import {
   organisationSchema,
 } from "../validationSchema";
 
-// Admin Details
+// Organisation Details
 export async function getOrganisationDetails(req, res) {
   try {
     const { id } = req.app.settings.userInfo;
@@ -28,5 +28,55 @@ export async function getOrganisationDetails(req, res) {
       error
     );
     return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
+  }
+}
+
+// Donated Items
+export async function getAllDonatedItems(req, res) {
+  try {
+    const { searchText, categoryId, condition } = req.query;
+
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        OR: [{ title: { contains: searchText } }],
+      };
+    }
+
+    if (categoryId) {
+      where = {
+        ...where,
+        categoryId: parseInt(categoryId),
+      };
+    }
+
+    if (condition) {
+      where = {
+        ...where,
+        condition,
+      };
+    }
+
+    const donatedItems = await prisma.donatedItem.findMany({
+      include: {
+        donor: true,
+        category: true,
+      },
+      where: {
+        isPickedUp: true,
+        approvalStatus: "approved",
+        ...where,
+      },
+    });
+    return sendResponse(res, true, donatedItems, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(
+      res.originalUrl,
+      "Error in getAllDonatedItems",
+      error
+    );
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
