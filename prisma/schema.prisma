@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -64,7 +64,7 @@ model Organisation {
 model Category {
   id          Int     @id @default(autoincrement())
   name        String
-  key         String  @unique
+  key         String @unique
   description String? @db.Text
 
   donatedItems DonatedItem[]
@@ -84,7 +84,7 @@ model DonatedItem {
   pickupAddress  String?        @db.Text
   approvalStatus ApprovalStatus @default(pending)
 
-  isAvailable    Boolean        @default(true)
+  isAvailable Boolean @default(true)
 
   donorId Int
   donor   Donor @relation(fields: [donorId], references: [id])

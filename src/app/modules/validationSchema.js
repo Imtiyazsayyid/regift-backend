@@ -81,7 +81,6 @@ const categorySchema = z.object({
     .string({ required_error: "Key is required" })
     .min(2, "Key is too small")
     .max(50, "Key is too long"),
-  donationItems: z.array(donatedItemSchema),
 });
 
 export { donorSchema, organisationSchema, donatedItemSchema, categorySchema };

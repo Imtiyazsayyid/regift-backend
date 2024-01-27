@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import statusType from "../../../@core/enum/statusTypes";
 import logger from "../../../@core/services/LoggingService";
 import { sendResponse } from "../../../@core/services/ResponseService";
@@ -7,6 +8,7 @@ import {
   donatedItemSchema,
   donorSchema,
   organisationSchema,
+  categorySchema,
 } from "../validationSchema";
 
 // Admin Details
@@ -335,8 +337,28 @@ export async function deleteOrganisation(req, res) {
 
 export async function getAllCategories(req, res) {
   try {
-    const categories = await prisma.category.findMany();
+    // const { searchText, key } = req.query;
 
+    // let where = {};
+
+    // if (searchText) {
+    //   where = {
+    //     ...where,
+    //     OR: [
+    //       { name: { contains: searchText } },
+    //       { key: { contains: searchText } },
+    //     ],
+    //   };
+    // }
+
+    // if (key) {
+    //   where = {
+    //     ...where,
+    //     key,
+    //   };
+    // }
+
+    const categories = await prisma.category.findMany();
     return sendResponse(res, true, categories, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in getAllCategories", error);
@@ -346,7 +368,50 @@ export async function getAllCategories(req, res) {
 
 export async function saveCategory(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const {
+      id,
+      name,
+      key,
+      description,
+      status,
+    } = req.body;
+
+    const categoryData = {
+      id,
+      name,
+      key,
+      description,
+      status,
+    };
+
+    const validation = categorySchema.safeParse(categoryData);
+
+    if (!validation.success) {
+      return sendResponse(
+        res,
+        false,
+        categoryData,
+        "Error ",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    let savedCategory;
+
+    if (categoryData.id) {
+      savedCategory = await prisma.category.update({
+        data: categoryData,
+        where: {
+          id: categoryData.id,
+        },
+      });
+    } else {
+      savedCategory = await prisma.category.create({
+        data: categoryData,
+      });
+    }
+
+    return sendResponse(res, true, categoryData, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveCategory", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
@@ -355,7 +420,25 @@ export async function saveCategory(req, res) {
 
 export async function getSingleCategory(req, res) {
   try {
-    return sendResponse(res, true, nul, "Api Not Ready Yet");
+    const { id } = req.params;
+
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(
+        res,
+        false,
+        null,
+        "Invalid Category ID",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    const category = await prisma.category.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, category, "Success");
   } catch (error) {
     logger.consoleErrorLog(
       res.originalUrl,
@@ -368,7 +451,41 @@ export async function getSingleCategory(req, res) {
 
 export async function deleteCategory(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const { id } = req.params;
+    
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(
+        res,
+        false,
+        null,
+        "Invalid Category ID",
+        statusType.BAD_REQUEST
+      );
+    }
+    
+    const donatedItems = await prisma.donatedItem.findFirst({
+      where: {
+        categoryId: parseInt(id),
+      },
+    });
+
+    if (donatedItems) {
+      return sendResponse(
+        res,
+        false,
+        null,
+        "Cannot delete category with associated donated items",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    const deletedCategory = await prisma.category.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, deletedCategory, "Success");
   } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteCategory", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
@@ -383,7 +500,7 @@ export async function getAllDonatedItems(req, res) {
       req.query;
 
     let where = {};
-
+    
     if (searchText) {
       where = {
         ...where,
