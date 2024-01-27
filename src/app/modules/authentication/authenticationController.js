@@ -1,10 +1,7 @@
 import { sendResponse } from "../../../@core/services/ResponseService";
 import statusType from "../../../@core/enum/statusTypes";
 import logger from "../../../@core/services/LoggingService";
-import {
-  validateLogin,
-  validateRegister,
-} from "../../../@core/helpers/validationHelper";
+import { validateLogin, validateRegister } from "../../../@core/helpers/validationHelper";
 import prisma from "../../../@core/helpers/prisma";
 import { hash } from "../../../@core/securityService/CryptoClient";
 import {
@@ -19,7 +16,7 @@ export async function login(req, res) {
     const body = {
       email: req.body.email,
       password: req.body.password,
-      user_role: "admin",
+      user_role: req.body.user_role,
     };
 
     const validate = validateLogin(body);
@@ -31,7 +28,25 @@ export async function login(req, res) {
     let user;
 
     if (body.user_role === "admin") {
-      user = await prisma.admin.findFirst({
+      user = await prisma.admin.findUnique({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findFirst({
         where: {
           email: body.email,
           status: true,
@@ -50,16 +65,12 @@ export async function login(req, res) {
     const payload = { user_id: user.id, user_role: body.user_role };
     const refreshToken = jwtRefreshTokenEncode(payload);
 
+    console.log({ refreshToken });
+
     return sendResponse(res, true, refreshToken, "Login Successfull");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in login", error);
-    return sendResponse(
-      res,
-      false,
-      null,
-      "Error in login",
-      statusType.DB_ERROR
-    );
+    return sendResponse(res, false, null, "Error in login", statusType.DB_ERROR);
   }
 }
 
@@ -95,13 +106,7 @@ export async function register(req, res) {
     return sendResponse(res, true, refreshToken, "Registration Successfull");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in register", error);
-    return sendResponse(
-      res,
-      false,
-      null,
-      "Error in register",
-      statusType.DB_ERROR
-    );
+    return sendResponse(res, false, null, "Error in register", statusType.DB_ERROR);
   }
 }
 
@@ -112,19 +117,22 @@ export async function getAccessToken(req, res) {
     const decoded = jwtRefreshTokenVerify(refreshToken);
 
     if (!decoded) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Refresh Token Not Valid",
-        statusType.UNAUTHORIZED
-      );
+      return sendResponse(res, false, null, "Refresh Token Not Valid", statusType.UNAUTHORIZED);
     }
 
     let user;
 
     if (decoded.user_role === "admin") {
       user = await prisma.admin.findUnique({
+        where: {
+          id: decoded.user_id,
+          status: true,
+        },
+      });
+    }
+
+    if (decoded.user_role === "organisation") {
+      user = await prisma.organisation.findUnique({
         where: {
           id: decoded.user_id,
           status: true,
@@ -142,12 +150,6 @@ export async function getAccessToken(req, res) {
     return sendResponse(res, true, accessToken, "Access Token");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in getAccessToken", error);
-    return sendResponse(
-      res,
-      false,
-      null,
-      "Error in getting access token",
-      statusType.DB_ERROR
-    );
+    return sendResponse(res, false, null, "Error in getting access token", statusType.DB_ERROR);
   }
 }
