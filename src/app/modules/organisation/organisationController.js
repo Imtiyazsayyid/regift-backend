@@ -78,6 +78,9 @@ export async function getSingleDonatedItem(req, res) {
     }
 
     const donatedItem = await prisma.donatedItem.findUnique({
+      include: {
+        category: true,
+      },
       where: {
         id: parseInt(id),
       },
