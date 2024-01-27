@@ -15,7 +15,7 @@ model Admin {
   id         Int     @id @default(autoincrement())
   firstName  String
   lastName   String
-  email      String @unique
+  email      String  @unique
   password   String
   gender     Gender
   profileImg String? @db.Text
@@ -47,7 +47,7 @@ model Organisation {
   id             Int            @id @default(autoincrement())
   name           String
   acronym        String?
-  email          String     @unique
+  email          String         @unique
   password       String
   websiteUrl     String?
   logo           String?        @db.Text
@@ -55,6 +55,7 @@ model Organisation {
   approvalStatus ApprovalStatus @default(pending)
 
   orders Order[]
+  cart   CartItem[]
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -64,7 +65,7 @@ model Organisation {
 model Category {
   id          Int     @id @default(autoincrement())
   name        String
-  key         String @unique
+  key         String  @unique
   description String? @db.Text
 
   donatedItems DonatedItem[]
@@ -93,6 +94,19 @@ model DonatedItem {
   category   Category @relation(fields: [categoryId], references: [id])
 
   orders Order[]
+  cart   CartItem[]
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+}
+
+model CartItem {
+  id             Int          @id @default(autoincrement())
+  organisationId Int
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  donatedItemId  Int
+  donatedItem    DonatedItem  @relation(fields: [donatedItemId], references: [id])
 
   status     Boolean  @default(true)
   created_at DateTime @default(now())
@@ -107,6 +121,10 @@ model Order {
   donatedItem    DonatedItem  @relation(fields: [donatedItemId], references: [id])
 
   orderStatus OrderStatus
+
+  status     Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
 
 enum OrderStatus {

@@ -516,7 +516,19 @@ export async function getSingleDonatedItem(req, res) {
 
 export async function deleteDonatedItem(req, res) {
   try {
-    return sendResponse(res, true, null, "Api Not Ready Yet");
+    const { id } = req.params;
+
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(res, false, null, "Invalid Cart Item ID", statusType.BAD_REQUEST);
+    }
+
+    const cartItem = await prisma.cartItem.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, cartItem, "Success");
   } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteDonatedItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);

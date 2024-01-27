@@ -65,8 +65,6 @@ export async function login(req, res) {
     const payload = { user_id: user.id, user_role: body.user_role };
     const refreshToken = jwtRefreshTokenEncode(payload);
 
-    console.log({ refreshToken });
-
     return sendResponse(res, true, refreshToken, "Login Successfull");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in login", error);
