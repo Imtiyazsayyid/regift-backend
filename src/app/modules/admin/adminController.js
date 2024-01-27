@@ -4,12 +4,7 @@ import logger from "../../../@core/services/LoggingService";
 import { sendResponse } from "../../../@core/services/ResponseService";
 import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
-import {
-  donatedItemSchema,
-  donorSchema,
-  organisationSchema,
-  categorySchema,
-} from "../validationSchema";
+import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
@@ -61,17 +56,7 @@ export async function getAllDonors(req, res) {
 
 export async function saveDonor(req, res) {
   try {
-    const {
-      id,
-      firstName,
-      lastName,
-      email,
-      password,
-      gender,
-      profileImg,
-      address,
-      status,
-    } = req.body;
+    const { id, firstName, lastName, email, password, gender, profileImg, address, status } = req.body;
 
     const donorData = {
       id,
@@ -88,13 +73,7 @@ export async function saveDonor(req, res) {
     const validation = donorSchema.safeParse(donorData);
 
     if (!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        donorData,
-        "Error ",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, donorData, "Error ", statusType.BAD_REQUEST);
     }
 
     let savedDonor;
@@ -124,13 +103,7 @@ export async function getSingleDonor(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Donor ID",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Donor ID", statusType.BAD_REQUEST);
     }
 
     const donor = await prisma.donor.findUnique({
@@ -151,13 +124,7 @@ export async function deleteDonor(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Donor ID",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Donor ID", statusType.BAD_REQUEST);
     }
 
     const deletedDonor = await prisma.donor.delete({
@@ -202,29 +169,14 @@ export async function getAllOrganisations(req, res) {
     const organisations = await prisma.organisation.findMany({ where });
     return sendResponse(res, true, organisations, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      req.originalUrl,
-      "Error in getAllOrganisations",
-      error
-    );
+    logger.consoleErrorLog(req.originalUrl, "Error in getAllOrganisations", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
 
 export async function saveOrganisation(req, res) {
   try {
-    const {
-      id,
-      name,
-      acronym,
-      email,
-      password,
-      websiteUrl,
-      logo,
-      address,
-      approvalStatus,
-      status,
-    } = req.body;
+    const { id, name, acronym, email, password, websiteUrl, logo, address, approvalStatus, status } = req.body;
 
     const organisationData = {
       id,
@@ -242,13 +194,7 @@ export async function saveOrganisation(req, res) {
     const validation = organisationSchema.safeParse(organisationData);
 
     if (!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        organisationData,
-        "Error",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, organisationData, "Error", statusType.BAD_REQUEST);
     }
 
     let savedOrganisation;
@@ -278,13 +224,7 @@ export async function getSingleOrganisation(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Organisation id",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Organisation id", statusType.BAD_REQUEST);
     }
 
     const organisation = await prisma.organisation.findUnique({
@@ -295,11 +235,7 @@ export async function getSingleOrganisation(req, res) {
 
     return sendResponse(res, true, organisation, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      req.originalUrl,
-      "Error in getSingleOrganisation",
-      error
-    );
+    logger.consoleErrorLog(req.originalUrl, "Error in getSingleOrganisation", error);
     return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
   }
 }
@@ -309,12 +245,7 @@ export async function deleteOrganisation(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        null,
-        "Invalid Organisation id",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, null, "Invalid Organisation id", statusType.BAD_REQUEST);
     }
 
     const deletedOrganisation = await prisma.organisation.delete({
@@ -324,11 +255,7 @@ export async function deleteOrganisation(req, res) {
     });
     return sendResponse(res, true, deletedOrganisation, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      req.originalUrl,
-      "Error in deleteOrganisation",
-      error
-    );
+    logger.consoleErrorLog(req.originalUrl, "Error in deleteOrganisation", error);
     return sendResponse(res, false, null, "Error ", statusType.DB_ERROR);
   }
 }
@@ -368,13 +295,7 @@ export async function getAllCategories(req, res) {
 
 export async function saveCategory(req, res) {
   try {
-    const {
-      id,
-      name,
-      key,
-      description,
-      status,
-    } = req.body;
+    const { id, name, key, description, status } = req.body;
 
     const categoryData = {
       id,
@@ -387,13 +308,7 @@ export async function saveCategory(req, res) {
     const validation = categorySchema.safeParse(categoryData);
 
     if (!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        categoryData,
-        "Error ",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, categoryData, "Error ", statusType.BAD_REQUEST);
     }
 
     let savedCategory;
@@ -423,13 +338,7 @@ export async function getSingleCategory(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Category ID",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Category ID", statusType.BAD_REQUEST);
     }
 
     const category = await prisma.category.findUnique({
@@ -440,11 +349,7 @@ export async function getSingleCategory(req, res) {
 
     return sendResponse(res, true, category, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      res.originalUrl,
-      "Error in getSingleCategory",
-      error
-    );
+    logger.consoleErrorLog(res.originalUrl, "Error in getSingleCategory", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
@@ -452,17 +357,11 @@ export async function getSingleCategory(req, res) {
 export async function deleteCategory(req, res) {
   try {
     const { id } = req.params;
-    
+
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Category ID",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Category ID", statusType.BAD_REQUEST);
     }
-    
+
     const donatedItems = await prisma.donatedItem.findFirst({
       where: {
         categoryId: parseInt(id),
@@ -470,13 +369,7 @@ export async function deleteCategory(req, res) {
     });
 
     if (donatedItems) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Cannot delete category with associated donated items",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Cannot Delete. Category In Use.", statusType.SUCCESS);
     }
 
     const deletedCategory = await prisma.category.delete({
@@ -496,17 +389,10 @@ export async function deleteCategory(req, res) {
 
 export async function getAllDonatedItems(req, res) {
   try {
-    const {
-      searchText,
-      approvalStatus,
-      categoryId,
-      condition,
-      availability,
-      isPickedUp,
-    } = req.query;
+    const { searchText, approvalStatus, categoryId, condition, availability, isPickedUp } = req.query;
 
     let where = {};
-    
+
     if (searchText) {
       where = {
         ...where,
@@ -558,28 +444,14 @@ export async function getAllDonatedItems(req, res) {
     });
     return sendResponse(res, true, donatedItems, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      res.originalUrl,
-      "Error in getAllDonatedItems",
-      error
-    );
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllDonatedItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
 
 export async function saveDonatedItem(req, res) {
   try {
-    const {
-      id,
-      title,
-      image,
-      condition,
-      approvalStatus,
-      isPickedUp,
-      categoryId,
-      description,
-      donorId,
-    } = req.body;
+    const { id, title, image, condition, approvalStatus, isPickedUp, categoryId, description, donorId } = req.body;
 
     const donatedItemData = {
       id,
@@ -596,13 +468,7 @@ export async function saveDonatedItem(req, res) {
     const validation = donatedItemSchema.safeParse(donatedItemData);
 
     if (!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        donatedItemData,
-        "Error",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, donatedItemData, "Error", statusType.BAD_REQUEST);
     }
 
     let savedDonatedItem;
@@ -632,13 +498,7 @@ export async function getSingleDonatedItem(req, res) {
     const { id } = req.params;
 
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(
-        res,
-        false,
-        null,
-        "Invalid Donated Item ID",
-        statusType.BAD_REQUEST
-      );
+      return sendResponse(res, false, null, "Invalid Donated Item ID", statusType.BAD_REQUEST);
     }
 
     const donatedItem = await prisma.donatedItem.findUnique({
@@ -649,11 +509,7 @@ export async function getSingleDonatedItem(req, res) {
 
     return sendResponse(res, true, donatedItem, "Success");
   } catch (error) {
-    logger.consoleErrorLog(
-      res.originalUrl,
-      "Error in getSingleDonatedItems",
-      error
-    );
+    logger.consoleErrorLog(res.originalUrl, "Error in getSingleDonatedItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
@@ -662,11 +518,7 @@ export async function deleteDonatedItem(req, res) {
   try {
     return sendResponse(res, true, null, "Api Not Ready Yet");
   } catch (error) {
-    logger.consoleErrorLog(
-      res.originalUrl,
-      "Error in deleteDonatedItems",
-      error
-    );
+    logger.consoleErrorLog(res.originalUrl, "Error in deleteDonatedItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
