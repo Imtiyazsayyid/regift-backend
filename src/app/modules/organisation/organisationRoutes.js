@@ -24,4 +24,10 @@ router.route("/cart-items").post(organisationController.saveCartItem);
 router.route("/cart-item/:id").get(organisationController.getSingleCartItem);
 router.route("/cart-item/:id").delete(organisationController.deleteCartItem);
 
+// Order
+router.route("/orders").get(organisationController.getAllOrders);
+router.route("/orders").post(organisationController.saveOrder);
+
+router.route("/order/:id").delete(organisationController.deleteOrder);
+
 export default router;

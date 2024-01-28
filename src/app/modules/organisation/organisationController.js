@@ -58,6 +58,7 @@ export async function getAllDonatedItems(req, res) {
       },
       where: {
         isPickedUp: true,
+        isAvailable: true,
         approvalStatus: "approved",
         ...where,
       },
@@ -198,6 +199,118 @@ export async function getSingleCartItem(req, res) {
 }
 
 export async function deleteCartItem(req, res) {
+  try {
+    const { id } = req.params;
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(res, false, null, "Invalid Cart Item ID", statusType.BAD_REQUEST);
+    }
+
+    const cartItem = await prisma.cartItem.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    return sendResponse(res, true, cartItem, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in deleteCartItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+// Order
+export async function getAllOrders(req, res) {
+  try {
+    const { searchText } = req.query;
+    const { id } = req.app.settings.userInfo;
+
+    let where = {};
+
+    if (searchText) {
+      where = {
+        ...where,
+        donatedItem: {
+          title: {
+            contains: searchText,
+          },
+        },
+      };
+    }
+
+    const order = await prisma.order.findMany({
+      include: {
+        donatedItem: {
+          include: {
+            category: true,
+          },
+        },
+        organisation: true,
+      },
+      where: {
+        organisationId: id,
+        ...where,
+      },
+    });
+
+    return sendResponse(res, true, order, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function saveOrder(req, res) {
+  try {
+    const { id } = req.app.settings.userInfo;
+
+    let cartItems = await prisma.cartItem.findMany({
+      where: {
+        organisationId: id,
+      },
+    });
+
+    if (cartItems.length === 0) {
+      return sendResponse(res, false, null, "Cart Is Empty");
+    }
+
+    cartItems = cartItems.map((item) => ({ ...item, orderStatus: "pending" }));
+
+    const placedOrder = await prisma.order.createMany({
+      data: cartItems,
+    });
+
+    const allOrders = await prisma.order.findMany({
+      where: {
+        organisationId: id,
+      },
+    });
+
+    for (let item of allOrders) {
+      // remove ordered items from everyones cart.
+      const deletedCartItems = await prisma.cartItem.deleteMany({
+        where: {
+          donatedItemId: item.donatedItemId,
+        },
+      });
+
+      // change availability of all donated items to false
+      const unAvailableItems = await prisma.donatedItem.update({
+        data: {
+          isAvailable: false,
+        },
+        where: {
+          id: item.donatedItemId,
+        },
+      });
+    }
+
+    return sendResponse(res, true, placedOrder, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveCartItem", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function deleteOrder(req, res) {
   try {
     const { id } = req.params;
     if (!id || !getIntOrNull(id)) {
