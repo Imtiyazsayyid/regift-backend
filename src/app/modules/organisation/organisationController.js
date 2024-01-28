@@ -227,6 +227,16 @@ export async function saveCartItem(req, res) {
       return sendResponse(res, false, null, "Item Already In Cart.");
     }
 
+    const donatedItem = await prisma.donatedItem.findUnique({
+      where: {
+        id: parseInt(donatedItemId),
+      },
+    });
+
+    if (!donatedItem.isAvailable) {
+      return sendResponse(res, false, null, "Item Not Avaialable.");
+    }
+
     let savedCartItem = await prisma.cartItem.create({
       data: cartItemData,
     });
@@ -281,7 +291,7 @@ export async function deleteCartItem(req, res) {
 // Order
 export async function getAllOrders(req, res) {
   try {
-    const { searchText } = req.query;
+    const { searchText, orderStatus, showCancelled } = req.query;
     const { id } = req.app.settings.userInfo;
 
     let where = {};
@@ -297,6 +307,20 @@ export async function getAllOrders(req, res) {
       };
     }
 
+    if (orderStatus) {
+      where = {
+        ...where,
+        orderStatus,
+      };
+    }
+
+    if (showCancelled === "true") {
+      where = {
+        ...where,
+        orderStatus: "cancelled",
+      };
+    }
+
     const order = await prisma.order.findMany({
       include: {
         donatedItem: {
@@ -308,6 +332,9 @@ export async function getAllOrders(req, res) {
       },
       where: {
         organisationId: id,
+        orderStatus: {
+          not: "cancelled",
+        },
         ...where,
       },
     });
@@ -333,15 +360,24 @@ export async function saveOrder(req, res) {
       return sendResponse(res, false, null, "Cart Is Empty");
     }
 
-    cartItems = cartItems.map((item) => ({ ...item, orderStatus: "pending" }));
+    cartItems = cartItems.map((item) => ({
+      organisationId: item.organisationId,
+      donatedItemId: item.donatedItemId,
+      orderStatus: "pending",
+    }));
 
-    const placedOrder = await prisma.order.createMany({
-      data: cartItems,
-    });
+    for (let item of cartItems) {
+      const placedOrder = await prisma.order.create({
+        data: item,
+      });
+    }
 
     const allOrders = await prisma.order.findMany({
       where: {
         organisationId: id,
+        orderStatus: {
+          not: "cancelled",
+        },
       },
     });
 
@@ -364,7 +400,7 @@ export async function saveOrder(req, res) {
       });
     }
 
-    return sendResponse(res, true, placedOrder, "Success");
+    return sendResponse(res, true, allOrders, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveCartItem", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
@@ -375,15 +411,28 @@ export async function deleteOrder(req, res) {
   try {
     const { id } = req.params;
     if (!id || !getIntOrNull(id)) {
-      return sendResponse(res, false, null, "Invalid Cart Item ID", statusType.BAD_REQUEST);
+      return sendResponse(res, false, null, "Invalid Order ID", statusType.BAD_REQUEST);
     }
 
-    const cartItem = await prisma.cartItem.delete({
+    const order = await prisma.order.update({
+      data: {
+        orderStatus: "cancelled",
+      },
       where: {
         id: parseInt(id),
       },
     });
-    return sendResponse(res, true, cartItem, "Success");
+
+    const itemAvailable = await prisma.donatedItem.update({
+      data: {
+        isAvailable: true,
+      },
+      where: {
+        id: order.donatedItemId,
+      },
+    });
+
+    return sendResponse(res, true, order, "Success");
   } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteCartItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
