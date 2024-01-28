@@ -45,6 +45,15 @@ export async function login(req, res) {
       });
     }
 
+    if (body.user_role === "organisation") {
+      user = await prisma.organisation.findFirst({
+        where: {
+          email: body.email,
+          status: true,
+        },
+      });
+    }
+
     if (!user) {
       return sendResponse(res, false, null, "No Such User");
     }

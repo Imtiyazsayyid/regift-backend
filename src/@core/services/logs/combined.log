@@ -39,3 +39,15 @@
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientInitializationError"},"level":"error","message":"Error in login","route":"/api/organisation/auth/login","timestamp":"2024-01-27T10:11:41.744Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T10:40:23.490Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T10:40:24.760Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveDonatedItem","route":"/api/organisation/cart-items","timestamp":"2024-01-27T21:27:54.956Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/cart-items","timestamp":"2024-01-27T21:28:27.080Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/cart-items","timestamp":"2024-01-27T21:29:11.860Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/cart-items","timestamp":"2024-01-27T21:31:45.879Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T21:41:51.688Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T21:41:51.699Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T21:41:55.669Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in getAllDonatedItems","timestamp":"2024-01-27T21:41:55.684Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:04:27.817Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:04:29.655Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:05:25.362Z"}
+{"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:06:36.060Z"}

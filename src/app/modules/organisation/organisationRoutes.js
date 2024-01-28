@@ -18,8 +18,19 @@ router.route("/donated-item/:id").get(organisationController.getSingleDonatedIte
 // Category
 router.route("/categories").get(organisationController.getAllCategories);
 
-// Organisation
+// Cart
+router.route("/cart-items").get(organisationController.getAllCartItems);
+router.route("/cart-items").post(organisationController.saveCartItem);
+router.route("/cart-item/:id").get(organisationController.getSingleCartItem);
+router.route("/cart-item/:id").delete(organisationController.deleteCartItem);
 
+// Organisation
 router.route("/organisations").post(organisationController.saveOrganisation);
+
+// Order
+router.route("/orders").get(organisationController.getAllOrders);
+router.route("/orders").post(organisationController.saveOrder);
+
+router.route("/order/:id").delete(organisationController.deleteOrder);
 
 export default router;
