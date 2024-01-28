@@ -43,3 +43,7 @@
 {"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:04:29.655Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:05:25.362Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to delete does not exist.","modelName":"CartItem"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in deleteCartItems","timestamp":"2024-01-27T22:06:36.060Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/orders","timestamp":"2024-01-28T15:32:49.548Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/orders","timestamp":"2024-01-28T15:33:01.470Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/orders","timestamp":"2024-01-28T15:36:13.858Z"}
+{"error":{},"level":"error","message":"Error in saveCartItem","route":"/api/organisation/orders","timestamp":"2024-01-28T15:36:50.870Z"}

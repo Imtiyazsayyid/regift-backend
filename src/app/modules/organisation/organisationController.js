@@ -299,15 +299,24 @@ export async function saveOrder(req, res) {
       return sendResponse(res, false, null, "Cart Is Empty");
     }
 
-    cartItems = cartItems.map((item) => ({ ...item, orderStatus: "pending" }));
+    cartItems = cartItems.map((item) => ({
+      organisationId: item.organisationId,
+      donatedItemId: item.donatedItemId,
+      orderStatus: "pending",
+    }));
 
-    const placedOrder = await prisma.order.createMany({
-      data: cartItems,
-    });
+    for (let item of cartItems) {
+      const placedOrder = await prisma.order.create({
+        data: item,
+      });
+    }
 
     const allOrders = await prisma.order.findMany({
       where: {
         organisationId: id,
+        orderStatus: {
+          not: "cancelled",
+        },
       },
     });
 
@@ -330,7 +339,7 @@ export async function saveOrder(req, res) {
       });
     }
 
-    return sendResponse(res, true, placedOrder, "Success");
+    return sendResponse(res, true, allOrders, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveCartItem", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
