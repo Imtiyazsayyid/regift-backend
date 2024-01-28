@@ -108,17 +108,7 @@ export async function getAllCategories(req, res) {
 // Organisation
 export async function saveOrganisation(req, res) {
   try {
-    const {
-      id,
-      name,
-      acronym,
-      email,
-      password,
-      websiteUrl,
-      logo,
-      address,
-      status,
-    } = req.body;
+    const { id, name, acronym, email, password, websiteUrl, logo, address, status } = req.body;
 
     const organisationData = {
       id,
@@ -132,16 +122,10 @@ export async function saveOrganisation(req, res) {
       status,
     };
 
-    const validation = organsiationSchema.safeParse(organisationData);
+    const validation = organisationSchema.safeParse(organisationData);
 
-    if(!validation.success) {
-      return sendResponse(
-        res,
-        false,
-        organisationData,
-        "Error ",
-        statusType.BAD_REQUEST,
-      );
+    if (!validation.success) {
+      return sendResponse(res, false, organisationData, "Error ", statusType.BAD_REQUEST);
     }
 
     let savedOrganisation;
@@ -160,7 +144,7 @@ export async function saveOrganisation(req, res) {
     }
 
     return sendResponse(res, true, organisationData, "Success");
-  } catch(error) {
+  } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
     return sendResponse(res, false, null, statusType.DB_ERROR);
   }
