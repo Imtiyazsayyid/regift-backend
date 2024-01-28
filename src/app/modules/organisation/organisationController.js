@@ -100,3 +100,66 @@ export async function getAllCategories(req, res) {
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
+
+
+// Organisation 
+
+export async function saveOrganisation(req, res){
+  try {
+    const {
+      id,
+      name,
+      acronym,
+      email,
+      password,
+      websiteUrl,
+      logo,
+      address,
+      status,
+    } = req.body;
+
+    const organisationData = {
+      id,
+      name,
+      acronym,
+      email,
+      password,
+      websiteUrl,
+      logo,
+      address,
+      status,
+    };
+
+    const validation = organisationSchema.safeParse(organisationData);
+
+    if(!validation.success) {
+      return sendResponse(
+        res,
+        false,
+        organisationData,
+        "Error",
+        statusType.BAD_REQUEST
+      );
+    }
+
+    let savedOrganisation;
+
+    if(organisationData.id) {
+      savedOrganisation = await prisma.organisation.update({
+        data: organisationData,
+        where: {
+          id: organisationData.id,
+        },
+      });
+    } else {
+      savedOrganisation = await prisma.organisation.create({
+        data: organisationData,
+      });
+    }
+  
+    return sendResponse(res, true, organisationData, "Success");
+  } catch(error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}

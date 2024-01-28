@@ -18,4 +18,8 @@ router.route("/donated-item/:id").get(organisationController.getSingleDonatedIte
 // Category
 router.route("/categories").get(organisationController.getAllCategories);
 
+// Organisation
+
+router.route("/organisations").post(organisationController.saveOrganisation);
+
 export default router;
