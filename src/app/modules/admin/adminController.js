@@ -6,7 +6,7 @@ import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 import moment from "moment";
-import { getComparisonDate } from "../../helpersdatetimeHelpers";
+import { getComparisonDate } from "../../helpers/datetimeHelpers";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
