@@ -10,15 +10,10 @@
     }
   ],
 
-  "rewrites": [{ "source": "/(.*)", "destination": "/src/index.js" }],
-  "headers": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
-    },
-    {
-      "source": "/https://regift-admin.vercel.app/(.*)",
-      "headers": [{ "key": "Access-Control-Allow-Origin", "value": "*" }]
+      "src": "/(.*)",
+      "dest": "/src/index.js"
     }
   ]
 }
