@@ -11,7 +11,11 @@ const app = express();
 app.set("port", process.env.PORT || 8003);
 app.use(express.static("public"));
 app.use(bodyParser.json({ limit: "500mb" }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://regift-admin.vercel.app",
+  })
+);
 app.use(cookieParser());
 app.use(
   fileUpload({
