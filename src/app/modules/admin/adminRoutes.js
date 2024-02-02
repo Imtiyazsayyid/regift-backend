@@ -35,4 +35,10 @@ router.route("/donated-items").post(adminController.saveDonatedItem);
 router.route("/donated-item/:id").get(adminController.getSingleDonatedItem);
 router.route("/donated-item/:id").delete(adminController.deleteDonatedItem);
 
+// orders
+router.route("/orders").get(adminController.getAllOrders);
+router.route("/orders").post(adminController.saveOrder);
+router.route("/order/:id").get(adminController.getSingleOrder);
+router.route("/order/:id").delete(adminController.deleteOrder);
+
 export default router;

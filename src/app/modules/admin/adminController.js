@@ -5,6 +5,8 @@ import { sendResponse } from "../../../@core/services/ResponseService";
 import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
+import moment from "moment";
+import { getComparisonDate } from "@/app/helpers/datetimeHelpers";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
@@ -531,6 +533,162 @@ export async function deleteDonatedItem(req, res) {
     return sendResponse(res, true, cartItem, "Success");
   } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteDonatedItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+// Orders
+
+export async function getAllOrders(req, res) {
+  // try {
+  const { searchText, orderStatus, showCancelled, dateRange } = req.query;
+
+  let where = {};
+
+  if (searchText) {
+    where = {
+      ...where,
+      donatedItem: {
+        title: {
+          contains: searchText,
+        },
+      },
+    };
+  }
+
+  if (orderStatus) {
+    where = {
+      ...where,
+      orderStatus,
+    };
+  }
+
+  if (showCancelled === "true") {
+    where = {
+      ...where,
+      orderStatus: "cancelled",
+    };
+  }
+
+  if (dateRange && dateRange.length == 2) {
+    const { startDate, endDate } = getComparisonDate(dateRange);
+
+    where = {
+      ...where,
+      created_at: {
+        gte: startDate,
+        lte: endDate,
+      },
+    };
+  }
+
+  const order = await prisma.order.findMany({
+    include: {
+      donatedItem: {
+        include: {
+          category: true,
+        },
+      },
+      organisation: true,
+    },
+    where: {
+      orderStatus: {
+        not: "cancelled",
+      },
+      ...where,
+    },
+  });
+
+  return sendResponse(res, true, order, "Success");
+  // } catch (error) {
+  //   logger.consoleErrorLog(res.originalUrl, "Error in getAllOrders", error);
+  //   return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  // }
+}
+
+export async function saveOrder(req, res) {
+  try {
+    const { orderStatus, id } = req.body;
+
+    if (!orderStatus || !id) {
+      return sendResponse(res, false, null, "Please Send Order Status And Order ID");
+    }
+
+    const allowedOrderStatus = ["pending", "processing", "confirmed", "shipped", "delivered", "cancelled"];
+
+    if (!allowedOrderStatus.includes(orderStatus)) {
+      return sendResponse(res, false, null, "Invalid Order Status");
+    }
+
+    const updatedOrder = await prisma.order.update({
+      data: {
+        orderStatus,
+      },
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, updatedOrder, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in saveOrder", error);
+    return sendResponse(res, false, null, "Error in SaveOrder", statusType.DB_ERROR);
+  }
+}
+
+export async function getSingleOrder(req, res) {
+  try {
+    const { id } = req.params;
+
+    const order = await prisma.order.findUnique({
+      include: {
+        donatedItem: {
+          include: {
+            category: true,
+          },
+        },
+        organisation: true,
+      },
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    return sendResponse(res, true, order, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function deleteOrder(req, res) {
+  try {
+    const { id } = req.params;
+    if (!id || !getIntOrNull(id)) {
+      return sendResponse(res, false, null, "Invalid Order ID", statusType.BAD_REQUEST);
+    }
+
+    const order = await prisma.order.update({
+      data: {
+        orderStatus: "cancelled",
+      },
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    const itemAvailable = await prisma.donatedItem.update({
+      data: {
+        isAvailable: true,
+      },
+      where: {
+        id: order.donatedItemId,
+      },
+    });
+
+    return sendResponse(res, true, order, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in deleteCartItems", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
