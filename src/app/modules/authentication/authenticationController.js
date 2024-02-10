@@ -45,8 +45,8 @@ export async function login(req, res) {
       });
     }
 
-    if (body.user_role === "organisation") {
-      user = await prisma.organisation.findFirst({
+    if (body.user_role === "donor") {
+      user = await prisma.donor.findUnique({
         where: {
           email: body.email,
           status: true,
@@ -131,6 +131,15 @@ export async function getAccessToken(req, res) {
 
     if (decoded.user_role === "organisation") {
       user = await prisma.organisation.findUnique({
+        where: {
+          id: decoded.user_id,
+          status: true,
+        },
+      });
+    }
+
+    if (decoded.user_role === "donor") {
+      user = await prisma.donor.findUnique({
         where: {
           id: decoded.user_id,
           status: true,
