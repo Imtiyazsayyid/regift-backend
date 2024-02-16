@@ -477,14 +477,22 @@ export async function saveDonatedItem(req, res) {
 
     if (donatedItemData.id) {
       savedDonatedItem = await prisma.donatedItem.update({
-        data: donatedItemData,
+        data: {
+          ...donatedItemData,
+          isAvailable:
+            donatedItemData.approvalStatus === "approved" && donatedItemData.isPickedUp === true ? true : false,
+        },
         where: {
           id: donatedItemData.id,
         },
       });
     } else {
       savedDonatedItem = await prisma.donatedItem.create({
-        data: donatedItemData,
+        data: {
+          ...donatedItemData,
+          isAvailable:
+            donatedItemData.approvalStatus === "approved" && donatedItemData.isPickedUp === true ? true : false,
+        },
       });
     }
 
