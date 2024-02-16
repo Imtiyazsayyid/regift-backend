@@ -72,3 +72,7 @@
 {"error":{},"level":"error","message":"Error in getAllOrders","timestamp":"2024-02-02T15:07:45.224Z"}
 {"error":{},"level":"error","message":"Error in getAllOrders","timestamp":"2024-02-02T15:07:45.244Z"}
 {"error":{},"level":"error","message":"Error in getAllOrders","timestamp":"2024-02-02T15:07:59.888Z"}
+{"error":{"expiredAt":"2024-02-11T15:49:28.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error in jwtAccessTokenVerify","route":"core","timestamp":"2024-02-11T17:12:45.159Z"}
+{"error":{"expiredAt":"2024-02-11T15:49:28.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error in jwtAccessTokenVerify","route":"core","timestamp":"2024-02-11T17:12:45.163Z"}
+{"error":{"expiredAt":"2024-02-12T17:12:54.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error in jwtAccessTokenVerify","route":"core","timestamp":"2024-02-16T15:23:36.065Z"}
+{"error":{"expiredAt":"2024-02-12T17:12:54.000Z","message":"jwt expired","name":"TokenExpiredError"},"level":"error","message":"Error in jwtAccessTokenVerify","route":"core","timestamp":"2024-02-16T15:23:36.070Z"}
