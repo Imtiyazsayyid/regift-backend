@@ -23,7 +23,27 @@ export async function getDonorDetails(req, res) {
   }
 }
 
-// Save Donated Items
+// Donated Items
+export async function getAllDonatedItems(req, res) {
+  try {
+    const { id } = req.app.settings.userInfo;
+
+    const donatedItems = await prisma.donatedItem.findMany({
+      include: {
+        donor: true,
+        category: true,
+      },
+      where: {
+        donorId: id,
+      },
+    });
+    return sendResponse(res, true, donatedItems, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllDonatedItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
 export async function saveDonatedItem(req, res) {
   try {
     const { title, image, condition, categoryId, description } = req.body;

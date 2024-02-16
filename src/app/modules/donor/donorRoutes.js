@@ -11,7 +11,8 @@ router.use(donorMiddleware);
 // Donor Details
 router.route("/details").get(donorController.getDonorDetails);
 
-// Save Donated Item
+// Donated Items
+router.route("/donated-items").get(donorController.getAllDonatedItems);
 router.route("/donated-item").post(donorController.saveDonatedItem);
 
 // Categories
