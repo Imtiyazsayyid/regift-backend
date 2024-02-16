@@ -19,7 +19,7 @@ export default async function authMiddleware(req, res, next) {
       return sendResponse(res, false, null, "Token Invalid", statusType.UNAUTHORIZED);
     }
 
-    const user = await prisma.organisation.findUnique({
+    const user = await prisma.donor.findUnique({
       where: { id: decoded.user_id },
     });
 
