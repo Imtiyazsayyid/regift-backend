@@ -1,20 +1,15 @@
-import toast from "react-hot-toast";
 import statusType from "../../../@core/enum/statusTypes";
 import logger from "../../../@core/services/LoggingService";
 import { sendResponse } from "../../../@core/services/ResponseService";
 import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
-import moment from "moment";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
 import { mailOptions, transporter } from "../../helpers/email";
 import { render } from "@react-email/render";
 
 // import WelcomeOrganisation from "../../../emails/WelcomeOrganisation";
 // import WelcomeApprovedOrganisation from "../../../emails/WelcomeApprovedOrganisation";
-
-const WelcomeApprovedOrganisation = require("../../../emails/WelcomeApprovedOrganisation");
-const WelcomeOrganisation = require("../../../emails/WelcomeOrganisation");
 
 // Admin Details
 export async function getAdminDetails(req, res) {
