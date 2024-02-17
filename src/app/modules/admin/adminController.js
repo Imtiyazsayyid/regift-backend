@@ -215,7 +215,7 @@ export async function saveOrganisation(req, res) {
         transporter.sendMail({
           ...mailOptions,
           to: savedOrganisation.email,
-          subject: "Account has been approved!",
+          subject: "Regift Account has been approved!",
           html: welcomeApprovedOrganisation(savedOrganisation),
         });
       }
@@ -224,7 +224,7 @@ export async function saveOrganisation(req, res) {
         transporter.sendMail({
           ...mailOptions,
           to: savedOrganisation.email,
-          subject: "Account has been approved!",
+          subject: "Regift Application has been rejected!",
           html: rejectOrganisation(savedOrganisation),
         });
       }
