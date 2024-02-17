@@ -5,6 +5,100 @@ import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema } from "../validationSchema";
 
+// Reset Password
+export async function sendOTP(req, res) {
+  try {
+    const { email } = req.body;
+
+    const organisation = await prisma.organisation.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!organisation) {
+      return sendResponse(res, false, null, "User Does Not Exist.");
+    }
+
+    const otp = Math.floor(Math.random() * 900000) + 100000;
+
+    const savedOrganisation = await prisma.organisation.update({
+      data: {
+        otp,
+      },
+      where: {
+        id: organisation.id,
+        approvalStatus: "approved",
+      },
+    });
+
+    // send OTP mail
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function verifyOTP(req, res) {
+  try {
+    const { email, otp } = req.body;
+
+    const organisation = await prisma.organisation.findFirst({
+      where: {
+        email,
+        otp: (otp && parseInt(otp)) || 0,
+        approvalStatus: "approved",
+      },
+    });
+
+    if (!organisation) {
+      return sendResponse(res, false, null, "Invalid OTP", statusType.BAD_REQUEST);
+    }
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function resetPassword(req, res) {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!newPassword || !email || !otp) {
+      return sendResponse(res, false, null, "Send All Details", statusType.BAD_REQUEST);
+    }
+
+    const organisation = await prisma.organisation.findFirst({
+      where: {
+        email,
+        otp: (otp && parseInt(otp)) || 0,
+        approvalStatus: "approved",
+      },
+    });
+
+    if (!organisation) {
+      return sendResponse(res, false, null, "Invalid Details", statusType.BAD_REQUEST);
+    }
+
+    const savedOrganisation = await prisma.organisation.update({
+      data: {
+        password: newPassword,
+      },
+      where: {
+        id: organisation.id,
+      },
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
 // Organisation Details
 export async function getOrganisationDetails(req, res) {
   try {

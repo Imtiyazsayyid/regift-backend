@@ -6,9 +6,9 @@ import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
 import { mailOptions, transporter } from "../../helpers/email";
-import welcomeOrganisation from "@/app/emails/templates/welcomeOrganisation";
-import welcomeApprovedOrganisation from "@/app/emails/templates/welcomeApprovedOrganisation";
-import rejectOrganisation from "@/app/emails/templates/rejectOrganisation";
+import welcomeOrganisation from "../../emails/templates/welcomeOrganisation";
+import welcomeApprovedOrganisation from "../../emails/templates/welcomeApprovedOrganisation";
+import rejectOrganisation from "../../emails/templates/rejectOrganisation";
 
 // Admin Details
 export async function getAdminDetails(req, res) {

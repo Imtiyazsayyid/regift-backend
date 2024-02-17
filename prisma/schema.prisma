@@ -53,6 +53,7 @@ model Organisation {
   logo           String?        @db.Text
   address        String         @db.Text
   approvalStatus ApprovalStatus @default(pending)
+  otp            Int? 
 
   orders Order[]
   cart   CartItem[]
