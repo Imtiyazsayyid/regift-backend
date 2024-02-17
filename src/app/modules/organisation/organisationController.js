@@ -4,6 +4,9 @@ import { sendResponse } from "../../../@core/services/ResponseService";
 import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema } from "../validationSchema";
+import organisationOTP from "../../emails/templates/organisationOTP";
+import organisationPasswordReset from "../../emails/templates/organisationPasswordReset";
+import { mailOptions, transporter } from "../../helpers/email";
 
 // Reset Password
 export async function sendOTP(req, res) {
@@ -13,6 +16,7 @@ export async function sendOTP(req, res) {
     const organisation = await prisma.organisation.findFirst({
       where: {
         email,
+        approvalStatus: "approved",
       },
     });
 
@@ -28,11 +32,16 @@ export async function sendOTP(req, res) {
       },
       where: {
         id: organisation.id,
-        approvalStatus: "approved",
       },
     });
 
     // send OTP mail
+    transporter.sendMail({
+      ...mailOptions,
+      to: savedOrganisation.email,
+      subject: "Verify Email",
+      html: organisationOTP(savedOrganisation),
+    });
 
     return sendResponse(res, true, null, "Success");
   } catch (error) {
@@ -91,6 +100,14 @@ export async function resetPassword(req, res) {
       where: {
         id: organisation.id,
       },
+    });
+
+    // send OTP mail
+    transporter.sendMail({
+      ...mailOptions,
+      to: savedOrganisation.email,
+      subject: "Password Reset",
+      html: organisationPasswordReset(savedOrganisation),
     });
 
     return sendResponse(res, true, null, "Success");

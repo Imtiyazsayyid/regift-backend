@@ -1,4 +1,6 @@
-<html lang="en">
+export default function organisationPasswordReset(organisation) {
+  return `
+  <html lang="en">
   <head>
     <style>
       body {
@@ -15,11 +17,7 @@
 
     <hr />
     <p>Hello ${organisation.name},</p>
-    <p>We have gotten a request from you to reset your password.</p>
-    <p>Please verify your email by using the OTP below.</p>
-
-    <h2>${otp}</h2>
-
+    <p>You have successfully reset your password.</p>
     <p>If this was not you contact us immediately.</p>
     <p>
       Best regards,<br />
@@ -31,3 +29,9 @@
     </p>
   </body>
 </html>
+
+
+
+
+  `;
+}

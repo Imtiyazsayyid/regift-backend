@@ -93,3 +93,13 @@
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/reset-password","timestamp":"2024-02-17T15:19:18.345Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2024","meta":{"connection_limit":17,"modelName":"Organisation","timeout":10},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T15:57:27.792Z"}
 {"error":{"clientVersion":"5.8.1","code":"P2025","meta":{"cause":"Record to update not found.","modelName":"Organisation"},"name":"PrismaClientKnownRequestError"},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:00:08.305Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/organisation/cart-items","timestamp":"2024-02-17T16:19:59.059Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/organisation/details","timestamp":"2024-02-17T16:19:59.073Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/organisation/cart-items","timestamp":"2024-02-17T16:19:59.078Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/organisation/details","timestamp":"2024-02-17T16:19:59.079Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:20:09.008Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:20:28.341Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:21:02.930Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:21:33.143Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:21:37.073Z"}
+{"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:22:25.875Z"}

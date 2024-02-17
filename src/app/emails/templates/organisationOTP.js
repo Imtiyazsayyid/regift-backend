@@ -1,4 +1,6 @@
-<html lang="en">
+export default function organisationOTP(organisation) {
+  return `
+  <html lang="en">
   <head>
     <style>
       body {
@@ -18,7 +20,7 @@
     <p>We have gotten a request from you to reset your password.</p>
     <p>Please verify your email by using the OTP below.</p>
 
-    <h2>${otp}</h2>
+    <h2>${organisation.otp}</h2>
 
     <p>If this was not you contact us immediately.</p>
     <p>
@@ -31,3 +33,5 @@
     </p>
   </body>
 </html>
+  `;
+}
