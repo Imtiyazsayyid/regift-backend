@@ -7,6 +7,10 @@ import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 import moment from "moment";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
+import { mailOptions, transporter } from "../../../../email";
+import { render } from "@react-email/render";
+import WelcomeOrganisation from "../../../../emails/WelcomeOrganisation";
+import WelcomeApprovedOrganisation from "../../../../emails/WelcomeApprovedOrganisation";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
@@ -208,13 +212,55 @@ export async function saveOrganisation(req, res) {
           id: organisationData.id,
         },
       });
+
+      if (savedOrganisation.approvalStatus === "approved") {
+        const Email = render(
+          WelcomeApprovedOrganisation({
+            email: organisationData.email,
+            password: organisationData.password,
+            name: organisationData.name,
+          })
+        );
+
+        transporter.sendMail({
+          ...mailOptions,
+          to: organisationData.email,
+          subject: "Regift Application Details.",
+          html: Email,
+        });
+      }
+
+      if (savedOrganisation.approvalStatus === "rejected") {
+        const Email = render(
+          WelcomeApprovedOrganisation({
+            email: organisationData.email,
+            password: organisationData.password,
+            name: organisationData.name,
+          })
+        );
+
+        transporter.sendMail({
+          ...mailOptions,
+          to: organisationData.email,
+          subject: "ReGift Application Rejected",
+          html: Email,
+        });
+      }
     } else {
       savedOrganisation = await prisma.organisation.create({
         data: organisationData,
       });
+
+      const Email = render(WelcomeOrganisation({ name: savedOrganisation.name }));
+      transporter.sendMail({
+        ...mailOptions,
+        to: savedOrganisation.email,
+        subject: "Welcome Aboard!",
+        html: Email,
+      });
     }
 
-    return sendResponse(res, true, organisationData, "Success");
+    return sendResponse(res, true, savedOrganisation, "Success");
   } catch (error) {
     logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
