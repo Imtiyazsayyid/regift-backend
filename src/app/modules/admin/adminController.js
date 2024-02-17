@@ -10,8 +10,11 @@ import { getComparisonDate } from "../../helpers/datetimeHelpers";
 import { mailOptions, transporter } from "../../helpers/email";
 import { render } from "@react-email/render";
 
-import WelcomeOrganisation from "../../../emails/WelcomeOrganisation";
-import WelcomeApprovedOrganisation from "../../../emails/WelcomeApprovedOrganisation";
+// import WelcomeOrganisation from "../../../emails/WelcomeOrganisation";
+// import WelcomeApprovedOrganisation from "../../../emails/WelcomeApprovedOrganisation";
+
+const WelcomeApprovedOrganisation = require("../../../emails/WelcomeApprovedOrganisation");
+const WelcomeOrganisation = require("../../../emails/WelcomeOrganisation");
 
 // Admin Details
 export async function getAdminDetails(req, res) {
