@@ -7,11 +7,11 @@ import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 import moment from "moment";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
-import { mailOptions, transporter } from "../../../../email";
+import { mailOptions, transporter } from "../../helpers/email";
 import { render } from "@react-email/render";
 
-import WelcomeOrganisation from "../../../../emails/WelcomeOrganisation.jsx";
-import WelcomeApprovedOrganisation from "../../../../emails/WelcomeApprovedOrganisation.jsx";
+import WelcomeOrganisation from "../../../emails/WelcomeOrganisation";
+import WelcomeApprovedOrganisation from "../../../emails/WelcomeApprovedOrganisation";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
