@@ -211,14 +211,14 @@ export async function saveOrganisation(req, res) {
       savedOrganisation = await prisma.organisation.create({
         data: organisationData,
       });
-
-      transporter.sendMail({
-        ...mailOptions,
-        to: savedOrganisation.email,
-        subject: "Welcome Aboard!",
-        html: "<h1>Hello</h1>",
-      });
     }
+
+    transporter.sendMail({
+      ...mailOptions,
+      to: savedOrganisation.email,
+      subject: "Welcome Aboard!",
+      html: "<h1>Hello</h1>",
+    });
 
     return sendResponse(res, true, savedOrganisation, "Success");
   } catch (error) {
