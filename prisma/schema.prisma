@@ -35,6 +35,7 @@ model Donor {
   gender     Gender
   profileImg String? @db.Text
   address    String? @db.Text
+  otp        Int? 
 
   donatedItems DonatedItem[]
 

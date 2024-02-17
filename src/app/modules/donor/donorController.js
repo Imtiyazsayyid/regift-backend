@@ -4,6 +4,116 @@ import { sendResponse } from "../../../@core/services/ResponseService";
 import prisma from "../../../@core/helpers/prisma";
 import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema } from "../validationSchema";
+import { mailOptions, transporter } from "../../helpers/email";
+import donorOTP from "../../emails/templates/donorOTP";
+import donorPasswordReset from "../../emails/templates/donorPasswordReset";
+
+// Reset Password
+export async function sendOTP(req, res) {
+  try {
+    const { email } = req.body;
+
+    const donor = await prisma.donor.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (!donor) {
+      return sendResponse(res, false, null, "User Does Not Exist.");
+    }
+
+    const otp = Math.floor(Math.random() * 900000) + 100000;
+
+    const savedDonor = await prisma.donor.update({
+      data: {
+        otp,
+      },
+      where: {
+        id: donor.id,
+      },
+    });
+
+    // send OTP mail
+    transporter.sendMail({
+      ...mailOptions,
+      to: savedDonor.email,
+      subject: "Verify Email",
+      html: donorOTP(savedDonor),
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function verifyOTP(req, res) {
+  try {
+    const { email, otp } = req.body;
+
+    const donor = await prisma.donor.findFirst({
+      where: {
+        email,
+        otp: (otp && parseInt(otp)) || 0,
+      },
+    });
+
+    if (!donor) {
+      return sendResponse(res, false, null, "Invalid OTP", statusType.BAD_REQUEST);
+    }
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function resetPassword(req, res) {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!newPassword || !email || !otp) {
+      return sendResponse(res, false, null, "Send All Details", statusType.BAD_REQUEST);
+    }
+
+    const donor = await prisma.donor.findFirst({
+      where: {
+        email,
+        otp: (otp && parseInt(otp)) || 0,
+      },
+    });
+
+    if (!donor) {
+      return sendResponse(res, false, null, "Invalid Details", statusType.BAD_REQUEST);
+    }
+
+    const savedDonor = await prisma.donor.update({
+      data: {
+        password: newPassword,
+        otp: null,
+      },
+      where: {
+        id: donor.id,
+      },
+    });
+
+    // send OTP mail
+    transporter.sendMail({
+      ...mailOptions,
+      to: savedDonor.email,
+      subject: "Password Reset",
+      html: donorPasswordReset(savedDonor),
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
 
 // Donor Details
 export async function getDonorDetails(req, res) {

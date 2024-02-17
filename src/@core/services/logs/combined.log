@@ -103,3 +103,8 @@
 {"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:21:33.143Z"}
 {"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:21:37.073Z"}
 {"error":{},"level":"error","message":"Error in saveOrganisation","route":"/api/organisation/send-otp","timestamp":"2024-02-17T16:22:25.875Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/donor/details","timestamp":"2024-02-17T17:35:44.594Z"}
+{"level":"info","message":"No authorization Token Provided","route":"/api/donor/details","timestamp":"2024-02-17T17:35:44.606Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/donor/reset-password","timestamp":"2024-02-17T17:47:04.930Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/donor/reset-password","timestamp":"2024-02-17T17:47:46.172Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in saveOrganisation","route":"/api/donor/reset-password","timestamp":"2024-02-17T17:47:49.292Z"}

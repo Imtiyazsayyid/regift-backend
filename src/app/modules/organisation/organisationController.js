@@ -96,6 +96,7 @@ export async function resetPassword(req, res) {
     const savedOrganisation = await prisma.organisation.update({
       data: {
         password: newPassword,
+        otp: null,
       },
       where: {
         id: organisation.id,
