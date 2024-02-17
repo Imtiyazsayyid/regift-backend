@@ -13,8 +13,8 @@ import { render } from "@react-email/render";
 // import WelcomeOrganisation from "../../../emails/WelcomeOrganisation";
 // import WelcomeApprovedOrganisation from "../../../emails/WelcomeApprovedOrganisation";
 
-const WelcomeApprovedOrganisation = require("../../../emails/WelcomeApprovedOrganisation");
-const WelcomeOrganisation = require("../../../emails/WelcomeOrganisation");
+const WelcomeApprovedOrganisation = require("../../../emails/WelcomeApprovedOrganisation.jsx");
+const WelcomeOrganisation = require("../../../emails/WelcomeOrganisation.jsx");
 
 // Admin Details
 export async function getAdminDetails(req, res) {
