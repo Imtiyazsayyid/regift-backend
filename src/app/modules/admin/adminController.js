@@ -6,6 +6,9 @@ import { getIntOrNull } from "../../../@core/helpers/commonHelpers";
 import { donatedItemSchema, donorSchema, organisationSchema, categorySchema } from "../validationSchema";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
 import { mailOptions, transporter } from "../../helpers/email";
+import welcomeOrganisation from "@/app/emails/templates/welcomeOrganisation";
+import welcomeApprovedOrganisation from "@/app/emails/templates/welcomeApprovedOrganisation";
+import rejectOrganisation from "@/app/emails/templates/rejectOrganisation";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
@@ -207,18 +210,36 @@ export async function saveOrganisation(req, res) {
           id: organisationData.id,
         },
       });
+
+      if (savedOrganisation.approvalStatus === "approved") {
+        transporter.sendMail({
+          ...mailOptions,
+          to: savedOrganisation.email,
+          subject: "Account has been approved!",
+          html: welcomeApprovedOrganisation(savedOrganisation),
+        });
+      }
+
+      if (savedOrganisation.approvalStatus === "rejected") {
+        transporter.sendMail({
+          ...mailOptions,
+          to: savedOrganisation.email,
+          subject: "Account has been approved!",
+          html: rejectOrganisation(savedOrganisation),
+        });
+      }
     } else {
       savedOrganisation = await prisma.organisation.create({
         data: organisationData,
       });
-    }
 
-    transporter.sendMail({
-      ...mailOptions,
-      to: savedOrganisation.email,
-      subject: "Welcome Aboard!",
-      html: "<h1>Hello</h1>",
-    });
+      transporter.sendMail({
+        ...mailOptions,
+        to: savedOrganisation.email,
+        subject: "Welcome Aboard!",
+        html: welcomeOrganisation(savedOrganisation),
+      });
+    }
 
     return sendResponse(res, true, savedOrganisation, "Success");
   } catch (error) {

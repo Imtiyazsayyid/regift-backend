@@ -20,7 +20,7 @@ export default async function authMiddleware(req, res, next) {
     }
 
     const user = await prisma.organisation.findUnique({
-      where: { id: decoded.user_id },
+      where: { id: decoded.user_id, approvalStatus: "approved" },
     });
 
     if (!user) {

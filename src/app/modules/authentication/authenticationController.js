@@ -40,6 +40,7 @@ export async function login(req, res) {
       user = await prisma.organisation.findUnique({
         where: {
           email: body.email,
+          approvalStatus: "approved",
           status: true,
         },
       });
