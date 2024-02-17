@@ -9,8 +9,9 @@ import moment from "moment";
 import { getComparisonDate } from "../../helpers/datetimeHelpers";
 import { mailOptions, transporter } from "../../../../email";
 import { render } from "@react-email/render";
-import WelcomeOrganisation from "../../../../emails/WelcomeOrganisation";
-import WelcomeApprovedOrganisation from "../../../../emails/WelcomeApprovedOrganisation";
+
+import WelcomeOrganisation from "../../../../emails/WelcomeOrganisation.jsx";
+import WelcomeApprovedOrganisation from "../../../../emails/WelcomeApprovedOrganisation.jsx";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
