@@ -1,5 +1,6 @@
-import { Body, Container, Html, Preview, Text, Link, Tailwind } from "@react-email/components";
+// import { Body, Container, Html, Preview, Text, Link, Tailwind } from "@react-email/components";
 import React from "react";
+const { Body, Container, Html, Preview, Text, Link, Tailwind } = require("@react-email/components");
 
 const WelcomeApprovedOrganisation = ({ email, password, name }) => {
   return (
