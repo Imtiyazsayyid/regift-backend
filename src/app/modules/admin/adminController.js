@@ -212,7 +212,7 @@ export async function saveOrganisation(req, res) {
       });
 
       if (savedOrganisation.approvalStatus === "approved") {
-        transporter.sendMail({
+        await transporter.sendMail({
           ...mailOptions,
           to: savedOrganisation.email,
           subject: "Regift Account has been approved!",
@@ -221,7 +221,7 @@ export async function saveOrganisation(req, res) {
       }
 
       if (savedOrganisation.approvalStatus === "rejected") {
-        transporter.sendMail({
+        await transporter.sendMail({
           ...mailOptions,
           to: savedOrganisation.email,
           subject: "Regift Application has been rejected!",
@@ -233,7 +233,7 @@ export async function saveOrganisation(req, res) {
         data: organisationData,
       });
 
-      transporter.sendMail({
+      await transporter.sendMail({
         ...mailOptions,
         to: savedOrganisation.email,
         subject: "Welcome Aboard!",

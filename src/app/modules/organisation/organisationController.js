@@ -36,7 +36,7 @@ export async function sendOTP(req, res) {
     });
 
     // send OTP mail
-    transporter.sendMail({
+    await transporter.sendMail({
       ...mailOptions,
       to: savedOrganisation.email,
       subject: "Verify Email",
@@ -104,7 +104,7 @@ export async function resetPassword(req, res) {
     });
 
     // send OTP mail
-    transporter.sendMail({
+    await transporter.sendMail({
       ...mailOptions,
       to: savedOrganisation.email,
       subject: "Password Reset",
