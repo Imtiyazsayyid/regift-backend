@@ -8,6 +8,84 @@ import { mailOptions, transporter } from "../../helpers/email";
 import donorOTP from "../../emails/templates/donorOTP";
 import donorPasswordReset from "../../emails/templates/donorPasswordReset";
 
+// Register
+export async function register(req, res) {
+  try {
+    const { firstName, lastName, email, password, gender, profileImg, address } = req.body;
+
+    const donorData = {
+      firstName,
+      lastName,
+      email,
+      password,
+      gender,
+      profileImg,
+      address,
+    };
+
+    const checkDonor = await prisma.donor.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (checkDonor.status) {
+      return sendResponse(res, false, null, "User Already Exists");
+    }
+
+    let deletedDonor = await prisma.donor.delete({
+      where: {
+        id: checkDonor.id,
+      },
+    });
+
+    const validation = donorSchema.safeParse(donorData);
+
+    if (!validation.success) {
+      return sendResponse(res, false, null, "Invalid Fields");
+    }
+
+    const otp = Math.floor(Math.random() * 900000) + 100000;
+
+    const donor = await prisma.donor.create({
+      data: { ...donorData, otp, status: false },
+    });
+
+    // send OTP mail
+    await transporter.sendMail({
+      ...mailOptions,
+      to: donor.email,
+      subject: "Verify Email",
+      html: donorOTP(donor, "register with us."),
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function deleteDonor(req, res) {
+  try {
+    const { email } = req.query;
+
+    if (!email) return sendResponse(res, false, null, "No Email Send");
+
+    const deletedDonor = await prisma.donor.delete({
+      where: {
+        email,
+        status: false,
+      },
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
 // Reset Password
 export async function sendOTP(req, res) {
   try {
@@ -39,7 +117,7 @@ export async function sendOTP(req, res) {
       ...mailOptions,
       to: savedDonor.email,
       subject: "Verify Email",
-      html: donorOTP(savedDonor),
+      html: donorOTP(savedDonor, "reset your password"),
     });
 
     return sendResponse(res, true, null, "Success");
@@ -61,8 +139,17 @@ export async function verifyOTP(req, res) {
     });
 
     if (!donor) {
-      return sendResponse(res, false, null, "Invalid OTP", statusType.BAD_REQUEST);
+      return sendResponse(res, false, null, "Invalid OTP");
     }
+
+    const updatedDonor = await prisma.donor.update({
+      data: {
+        status: true,
+      },
+      where: {
+        id: donor.id,
+      },
+    });
 
     return sendResponse(res, true, null, "Success");
   } catch (error) {
