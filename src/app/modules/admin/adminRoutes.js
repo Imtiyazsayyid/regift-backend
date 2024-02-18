@@ -41,4 +41,10 @@ router.route("/orders").post(adminController.saveOrder);
 router.route("/order/:id").get(adminController.getSingleOrder);
 router.route("/order/:id").delete(adminController.deleteOrder);
 
+// charts
+router.route("/chart-orders").get(adminController.chartOrders);
+router.route("/chart-donors").get(adminController.chartDonors);
+router.route("/chart-organisations").get(adminController.chartOrganisations);
+router.route("/chart-donations").get(adminController.chartDonations);
+
 export default router;

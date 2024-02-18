@@ -9,6 +9,19 @@ import { mailOptions, transporter } from "../../helpers/email";
 import welcomeOrganisation from "../../emails/templates/welcomeOrganisation";
 import welcomeApprovedOrganisation from "../../emails/templates/welcomeApprovedOrganisation";
 import rejectOrganisation from "../../emails/templates/rejectOrganisation";
+import moment from "moment";
+
+import {
+  processOrders,
+  getMonthRange,
+  mergeWithRange,
+  mergeDonorsWithRange,
+  processDonors,
+  procesOrganisations,
+  mergeOrganisationsWithRange,
+  mergeDonationsWithRange,
+  procesDonations,
+} from "./chartHelpers";
 
 // Admin Details
 export async function getAdminDetails(req, res) {
@@ -575,70 +588,70 @@ export async function deleteDonatedItem(req, res) {
 // Orders
 
 export async function getAllOrders(req, res) {
-  // try {
-  const { searchText, orderStatus, showCancelled, dateRange } = req.query;
+  try {
+    const { searchText, orderStatus, showCancelled, dateRange } = req.query;
 
-  let where = {};
+    let where = {};
 
-  if (searchText) {
-    where = {
-      ...where,
-      donatedItem: {
-        title: {
-          contains: searchText,
+    if (searchText) {
+      where = {
+        ...where,
+        donatedItem: {
+          title: {
+            contains: searchText,
+          },
         },
-      },
-    };
-  }
+      };
+    }
 
-  if (orderStatus) {
-    where = {
-      ...where,
-      orderStatus,
-    };
-  }
+    if (orderStatus) {
+      where = {
+        ...where,
+        orderStatus,
+      };
+    }
 
-  if (showCancelled === "true") {
-    where = {
-      ...where,
-      orderStatus: "cancelled",
-    };
-  }
+    if (showCancelled === "true") {
+      where = {
+        ...where,
+        orderStatus: "cancelled",
+      };
+    }
 
-  if (dateRange && dateRange.length == 2) {
-    const { startDate, endDate } = getComparisonDate(dateRange);
+    if (dateRange && dateRange.length == 2) {
+      const { startDate, endDate } = getComparisonDate(dateRange);
 
-    where = {
-      ...where,
-      created_at: {
-        gte: startDate,
-        lte: endDate,
-      },
-    };
-  }
-
-  const order = await prisma.order.findMany({
-    include: {
-      donatedItem: {
-        include: {
-          category: true,
+      where = {
+        ...where,
+        created_at: {
+          gte: startDate,
+          lte: endDate,
         },
-      },
-      organisation: true,
-    },
-    where: {
-      orderStatus: {
-        not: "cancelled",
-      },
-      ...where,
-    },
-  });
+      };
+    }
 
-  return sendResponse(res, true, order, "Success");
-  // } catch (error) {
-  //   logger.consoleErrorLog(res.originalUrl, "Error in getAllOrders", error);
-  //   return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
-  // }
+    const order = await prisma.order.findMany({
+      include: {
+        donatedItem: {
+          include: {
+            category: true,
+          },
+        },
+        organisation: true,
+      },
+      where: {
+        orderStatus: {
+          not: "cancelled",
+        },
+        ...where,
+      },
+    });
+
+    return sendResponse(res, true, order, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in getAllOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
 }
 
 export async function saveOrder(req, res) {
@@ -724,6 +737,189 @@ export async function deleteOrder(req, res) {
     return sendResponse(res, true, order, "Success");
   } catch (error) {
     logger.consoleErrorLog(res.originalUrl, "Error in deleteCartItems", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+// charts
+
+export async function chartOrders(req, res) {
+  try {
+    // Fetch all orders
+
+    const { startDate, endDate } = req.params;
+
+    let created_at = {};
+
+    if (startDate) {
+      created_at = {
+        ...created_at,
+        gte: moment(startDate).toISOString(),
+      };
+    }
+
+    if (endDate) {
+      created_at = {
+        ...created_at,
+        lte: moment(endDate).toISOString(),
+      };
+    }
+
+    const allOrders = await prisma.order.findMany({
+      where: {
+        orderStatus: {
+          not: "cancelled",
+        },
+        created_at,
+      },
+    });
+
+    // Process orders to create an array of objects including months with no orders
+    const monthlyOrders = processOrders(allOrders);
+
+    // Get the range of months from 12 months ago to the current month
+    const range = getMonthRange();
+
+    // Merge the existing monthlyOrders with the range to ensure all months are included
+    const result = mergeWithRange(monthlyOrders, range);
+
+    return sendResponse(res, true, result, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function chartDonations(req, res) {
+  try {
+    // Fetch all orders
+
+    const { startDate, endDate } = req.params;
+
+    let created_at = {};
+
+    if (startDate) {
+      created_at = {
+        ...created_at,
+        gte: moment(startDate).toISOString(),
+      };
+    }
+
+    if (endDate) {
+      created_at = {
+        ...created_at,
+        lte: moment(endDate).toISOString(),
+      };
+    }
+
+    const allDonations = await prisma.donatedItem.findMany({
+      where: {
+        created_at,
+      },
+    });
+
+    // Process orders to create an array of objects including months with no orders
+    const monthlyDonations = procesDonations(allDonations);
+
+    // Get the range of months from 12 months ago to the current month
+    const range = getMonthRange();
+
+    // Merge the existing monthlyOrders with the range to ensure all months are included
+    const result = mergeDonationsWithRange(monthlyDonations, range);
+
+    return sendResponse(res, true, result, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function chartDonors(req, res) {
+  try {
+    // Fetch all orders
+
+    const { startDate, endDate } = req.params;
+
+    let created_at = {};
+
+    if (startDate) {
+      created_at = {
+        ...created_at,
+        gte: moment(startDate).toISOString(),
+      };
+    }
+
+    if (endDate) {
+      created_at = {
+        ...created_at,
+        lte: moment(endDate).toISOString(),
+      };
+    }
+
+    const allDonors = await prisma.donor.findMany({
+      where: {
+        status: true,
+        created_at,
+      },
+    });
+
+    // Process orders to create an array of objects including months with no orders
+    const monthlyDonors = processDonors(allDonors);
+
+    // Get the range of months from 12 months ago to the current month
+    const range = getMonthRange();
+
+    // Merge the existing monthlyOrders with the range to ensure all months are included
+    const result = mergeDonorsWithRange(monthlyDonors, range);
+
+    return sendResponse(res, true, result, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function chartOrganisations(req, res) {
+  try {
+    // Fetch all orders
+
+    const { startDate, endDate } = req.params;
+
+    let created_at = {};
+
+    if (startDate) {
+      created_at = {
+        ...created_at,
+        gte: moment(startDate).toISOString(),
+      };
+    }
+
+    if (endDate) {
+      created_at = {
+        ...created_at,
+        lte: moment(endDate).toISOString(),
+      };
+    }
+
+    const allOrganisations = await prisma.organisation.findMany({
+      where: {
+        status: true,
+        created_at,
+      },
+    });
+
+    // Process orders to create an array of objects including months with no orders
+    const monthlyOrganisations = procesOrganisations(allOrganisations);
+
+    // Get the range of months from 12 months ago to the current month
+    const range = getMonthRange();
+
+    // Merge the existing monthlyOrders with the range to ensure all months are included
+    const result = mergeOrganisationsWithRange(monthlyOrganisations, range);
+
+    return sendResponse(res, true, result, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
