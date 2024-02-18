@@ -1,4 +1,4 @@
-export default function organisationOTP(organisation) {
+export default function organisationOTP(organisation, message) {
   return `
   <html lang="en">
   <head>
@@ -17,7 +17,7 @@ export default function organisationOTP(organisation) {
 
     <hr />
     <p>Hello ${organisation.name},</p>
-    <p>We have gotten a request from you to reset your password.</p>
+    <p>We have gotten a request from you to ${message}.</p>
     <p>Please verify your email by using the OTP below.</p>
 
     <h2>${organisation.otp}</h2>

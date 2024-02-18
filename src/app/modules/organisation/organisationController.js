@@ -8,6 +8,87 @@ import organisationOTP from "../../emails/templates/organisationOTP";
 import organisationPasswordReset from "../../emails/templates/organisationPasswordReset";
 import { mailOptions, transporter } from "../../helpers/email";
 
+// Register
+export async function register(req, res) {
+  try {
+    const { name, email, password, logo, acronym, address, websiteUrl } = req.body;
+
+    const organisationData = {
+      name,
+      acronym,
+      email,
+      password,
+      websiteUrl,
+      logo,
+      address,
+    };
+
+    // check if organisation exists with same email
+    const checkOrganisation = await prisma.organisation.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (checkOrganisation) {
+      if (checkOrganisation.status) {
+        return sendResponse(res, false, null, "User Already Exists");
+      } else {
+        let deletedOrganisation = await prisma.organisation.delete({
+          where: {
+            email,
+          },
+        });
+      }
+    }
+
+    const validation = organisationSchema.safeParse(organisationData);
+
+    if (!validation.success) {
+      return sendResponse(res, false, null, "Invalid Fields");
+    }
+
+    const otp = Math.floor(Math.random() * 900000) + 100000;
+
+    const organisation = await prisma.organisation.create({
+      data: { ...organisationData, otp, status: false },
+    });
+
+    // send OTP mail
+    await transporter.sendMail({
+      ...mailOptions,
+      to: organisation.email,
+      subject: "Verify Email",
+      html: organisationOTP(organisation, "register with us."),
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
+export async function deleteOrganisation(req, res) {
+  try {
+    const { email } = req.query;
+
+    if (!email) return sendResponse(res, false, null, "No Email Send");
+
+    const deletedOrganisation = await prisma.organisation.delete({
+      where: {
+        email,
+        status: false,
+      },
+    });
+
+    return sendResponse(res, true, null, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveOrganisation", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
 // Reset Password
 export async function sendOTP(req, res) {
   try {
@@ -40,7 +121,7 @@ export async function sendOTP(req, res) {
       ...mailOptions,
       to: savedOrganisation.email,
       subject: "Verify Email",
-      html: organisationOTP(savedOrganisation),
+      html: organisationOTP(savedOrganisation, "reset your password"),
     });
 
     return sendResponse(res, true, null, "Success");
@@ -58,13 +139,22 @@ export async function verifyOTP(req, res) {
       where: {
         email,
         otp: (otp && parseInt(otp)) || 0,
-        approvalStatus: "approved",
+        // approvalStatus: "approved",
       },
     });
 
     if (!organisation) {
-      return sendResponse(res, false, null, "Invalid OTP", statusType.BAD_REQUEST);
+      return sendResponse(res, false, null, "Invalid OTP");
     }
+
+    const updatedOrganisation = await prisma.organisation.update({
+      data: {
+        status: true,
+      },
+      where: {
+        id: organisation.id,
+      },
+    });
 
     return sendResponse(res, true, null, "Success");
   } catch (error) {

@@ -29,15 +29,17 @@ export async function register(req, res) {
       },
     });
 
-    if (checkDonor.status) {
-      return sendResponse(res, false, null, "User Already Exists");
+    if (checkDonor) {
+      if (checkDonor.status) {
+        return sendResponse(res, false, null, "User Already Exists");
+      } else {
+        let deletedDonor = await prisma.donor.delete({
+          where: {
+            email,
+          },
+        });
+      }
     }
-
-    let deletedDonor = await prisma.donor.delete({
-      where: {
-        id: checkDonor.id,
-      },
-    });
 
     const validation = donorSchema.safeParse(donorData);
 

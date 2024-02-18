@@ -7,6 +7,8 @@ import organisationMiddleware from "../../middlewares/organisationMiddleware";
 
 router.use("/auth", authRoutes);
 
+router.route("/register").post(organisationController.register);
+
 router.route("/send-otp").post(organisationController.sendOTP);
 router.route("/verify-otp").post(organisationController.verifyOTP);
 router.route("/reset-password").post(organisationController.resetPassword);
