@@ -46,5 +46,8 @@ router.route("/chart-orders").get(adminController.chartOrders);
 router.route("/chart-donors").get(adminController.chartDonors);
 router.route("/chart-organisations").get(adminController.chartOrganisations);
 router.route("/chart-donations").get(adminController.chartDonations);
+router.route("/chart-counts").get(adminController.chartCounts);
+router.route("/chart-orders-by-category").get(adminController.chartOrdersByCategory);
+router.route("/chart-donations-by-category").get(adminController.chartDonationsByCategory);
 
 export default router;

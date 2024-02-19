@@ -118,3 +118,4 @@
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in chartOrders","timestamp":"2024-02-18T18:13:42.527Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in chartOrders","timestamp":"2024-02-18T18:13:53.027Z"}
 {"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in chartOrders","timestamp":"2024-02-18T18:13:53.045Z"}
+{"error":{"clientVersion":"5.8.1","name":"PrismaClientValidationError"},"level":"error","message":"Error in chartOrders","timestamp":"2024-02-19T16:12:40.343Z"}

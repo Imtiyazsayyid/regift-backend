@@ -923,3 +923,115 @@ export async function chartOrganisations(req, res) {
     return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
   }
 }
+
+export async function chartCounts(req, res) {
+  try {
+    const organisationsCount = await prisma.organisation.count({
+      where: {
+        status: true,
+      },
+    });
+
+    const donorsCount = await prisma.donor.count({
+      where: {
+        status: true,
+      },
+    });
+
+    const donationsCount = await prisma.donatedItem.count();
+
+    const ordersCount = await prisma.order.count({
+      where: {
+        orderStatus: {
+          not: "cancelled",
+        },
+      },
+    });
+
+    const totalUsersCount = organisationsCount + donorsCount;
+
+    const data = {
+      organisationsCount,
+      donorsCount,
+      donationsCount,
+      ordersCount,
+      totalUsersCount,
+    };
+
+    return sendResponse(res, true, data, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function chartOrdersByCategory(req, res) {
+  try {
+    const ordersByCategory = await prisma.order.findMany({
+      include: {
+        donatedItem: {
+          include: {
+            category: true,
+          },
+        },
+      },
+      where: {
+        orderStatus: {
+          not: "cancelled",
+        },
+      },
+    });
+
+    // Now, let's create a map to count orders by category
+    const ordersCountByCategory = {};
+
+    ordersByCategory.forEach((order) => {
+      const categoryName = order.donatedItem.category.name;
+      if (!ordersCountByCategory[categoryName]) {
+        ordersCountByCategory[categoryName] = 0;
+      }
+      ordersCountByCategory[categoryName]++;
+    });
+
+    const ordersCountArray = Object.keys(ordersCountByCategory).map((categoryName) => ({
+      name: categoryName,
+      count: ordersCountByCategory[categoryName],
+    }));
+
+    return sendResponse(res, true, ordersCountArray, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
+
+export async function chartDonationsByCategory(req, res) {
+  try {
+    const donationsByCategory = await prisma.donatedItem.findMany({
+      include: {
+        category: true,
+      },
+    });
+
+    // Now, let's create a map to count orders by category
+    const donationsCountByCategory = {};
+
+    donationsByCategory.forEach((donatedItem) => {
+      const categoryName = donatedItem.category.name;
+      if (!donationsCountByCategory[categoryName]) {
+        donationsCountByCategory[categoryName] = 0;
+      }
+      donationsCountByCategory[categoryName]++;
+    });
+
+    const donationsCountArray = Object.keys(donationsCountByCategory).map((categoryName) => ({
+      name: categoryName,
+      count: donationsCountByCategory[categoryName],
+    }));
+
+    return sendResponse(res, true, donationsCountArray, "Success");
+  } catch (error) {
+    logger.consoleErrorLog(res.originalUrl, "Error in chartOrders", error);
+    return sendResponse(res, false, null, "Error", statusType.DB_ERROR);
+  }
+}
