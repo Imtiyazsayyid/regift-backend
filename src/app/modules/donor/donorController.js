@@ -243,6 +243,50 @@ export async function getAllDonatedItems(req, res) {
   }
 }
 
+// Save Donor Details (update)
+export async function saveDonor(req, res) {
+  try{
+    const { id, firstName, lastName, email, password, profileImg, gender, address, status } = req.body;
+
+    const donorData = {
+      id,
+      firstName,
+      lastName,
+      email,
+      password,
+      profileImg,
+      gender,
+      address,
+      status,
+    };
+
+    const validation = donorSchema.safeParse(donorData);
+    if(!validation.success){
+      return sendResponse(res, true, donorData, "Error ", statusType.BAD_REQUEST);
+    };
+
+    let savedDonor;
+
+    if (donorData.id) {
+      savedDonor = await prisma.donor.update({
+        data: donorData,
+        where: {
+          id: donorData.id,
+        },
+      });
+    } else {
+      savedDonor = await prisma.donor.create({
+        data: donorData,
+      });
+    } 
+
+    return sendResponse(res, true, donorData, "Success");
+  } catch(error) {
+    logger.consoleErrorLog(req.originalUrl, "Error in saveDonor", error);
+    return sendResponse(res, false, null, statusType.DB_ERROR);
+  }
+}
+
 export async function saveDonatedItem(req, res) {
   try {
     const { title, image, condition, categoryId, description } = req.body;

@@ -18,6 +18,7 @@ router.use(donorMiddleware);
 // Donor Details
 router.route("/details").get(donorController.getDonorDetails);
 router.route("/delete").delete(donorController.deleteDonor);
+router.route("/donors").post(donorController.saveDonor);
 
 // Donated Items
 router.route("/donated-items").get(donorController.getAllDonatedItems);
